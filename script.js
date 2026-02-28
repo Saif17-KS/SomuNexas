@@ -31,7 +31,7 @@ window.onValue = onValue;
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         // এখানে তোমার নিজের ইমেইলটি বসাও
-        if (user.email !== "mdsaifhasan7243@gmail.com") {
+        if (user.email !== "mdsaifhasan724317@gmail.com") {
             alert("আপনি এই পেজ দেখার অনুমতি নেই!");
             window.location.href = "index.html"; // সাধারণ কাস্টমার হলে বের করে দেবে
         }
@@ -2358,4 +2358,5 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
+
 

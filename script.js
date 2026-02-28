@@ -26,6 +26,21 @@ window.set = set;
 window.update = update;
 window.onValue = onValue;
 
+///owner use site code no use customer////
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // এখানে তোমার নিজের ইমেইলটি বসাও
+        if (user.email !== "mdsaifhasan7243@gmail.com") {
+            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
+            window.location.href = "index.html"; // সাধারণ কাস্টমার হলে বের করে দেবে
+        }
+    } else {
+        // যদি কেউ লগইন না করেই ঢোকে
+        window.location.href = "login.html";
+    }
+});
+///End////
+
 
 // এই কোডটি তোমার ফাইলের একদম শেষে অথবা Firebase initialization এর পরে বসাও
 const productsRefForUI = ref(db, 'products');

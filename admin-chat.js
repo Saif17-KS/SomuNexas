@@ -30,6 +30,20 @@ window.get = get;
 
 let activeUserId = null;
 
+///owner use site code no use customer////
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // এখানে তোমার নিজের ইমেইলটি বসাও
+        if (user.email !== "mdsaifhasan7243@gmail.com") {
+            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
+            window.location.href = "index.html"; // সাধারণ কাস্টমার হলে বের করে দেবে
+        }
+    } else {
+        // যদি কেউ লগইন না করেই ঢোকে
+        window.location.href = "login.html";
+    }
+});
+///End////
     // ৩. বাম পাশের লিস্টে ইউজারদের চ্যাট লোড করা
     const userListDiv = document.getElementById('user-list');
 

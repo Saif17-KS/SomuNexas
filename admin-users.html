@@ -83,6 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const uCount = document.getElementById('uCount');
     const oCount = document.getElementById('oCount');
 
+///owner use site code no use customer////
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // এখানে তোমার নিজের ইমেইলটি বসাও
+        if (user.email !== "mdsaifhasan7243@gmail.com") {
+            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
+            window.location.href = "index.html"; // সাধারণ কাস্টমার হলে বের করে দেবে
+        }
+    } else {
+        // যদি কেউ লগইন না করেই ঢোকে
+        window.location.href = "login.html";
+    }
+});
+///End////
+
     // Firebase থেকে ইউজার ডাটা পড়া
     onValue(ref(db, 'users'), (snapshot) => {
         const data = snapshot.val();

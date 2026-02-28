@@ -23,8 +23,11 @@ window.db = db;
 window.ref = ref;
 window.get = get;
 window.set = set;
+window.push = push;
 window.update = update;
 window.onValue = onValue;
+window.remove = remove;
+window.get = get;
 
 
 // এই কোডটি তোমার ফাইলের একদম শেষে অথবা Firebase initialization এর পরে বসাও
@@ -2342,3 +2345,4 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
+

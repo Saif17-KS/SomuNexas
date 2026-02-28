@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SomuNexus | Admin Dashboard</title>
+    <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="icon/KS.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        .admin-body { background: #050505; padding: 50px; }
+        .admin-container { max-width: 800px; margin: auto; background: #111; padding: 40px; border-radius: 20px; border: 1px solid #d4af37; }
+        .admin-container h2 { color: #d4af37; text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; color: #ccc; }
+        .input-group input, .input-group textarea { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; }
+        .publish-btn { width: 100%; padding: 15px; background: #f46e20; border: none; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .publish-btn:hover { background: #fff; color: #000; }
+    </style>
+</head>
+<body class="admin-body">
+
+<div class="admin-container">
+    <h2>SOMUNEXUS ADMIN</h2>
+
+    <form id="productForm">
+        <input type="hidden" id="editProductId">
+
+        <div class="input-group">
+            <label>Product Name</label>
+            <input type="text" id="pName" placeholder="e.g. Luxury Products-item">
+            <input type="number" id="pStock" placeholder="Product Stock Quantity" required>
+        </div>
+
+        <div class="input-group">
+            <label>Original Price (Optional)</label>
+            <input type="text" id="pOldPrice" placeholder="e.g. Original-Price">
+        </div>
+
+        <div class="input-group">
+            <label>Discount/Current Price</label>
+            <input type="text" id="pPrice" placeholder="e.g. Discount-Price">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="number" id="p-inside-dhaka" placeholder="ঢাকার ভেতরে চার্জ (যেমন: ৬০)" style="width: 50%; padding: 10px; background: #111; border: 1px solid #d4af37; color: #fff; border-radius: 5px;">
+            <input type="number" id="p-outside-dhaka" placeholder="ঢাকার বাইরে চার্জ (যেমন: ১২০)" style="width: 50%; padding: 10px; background: #111; border: 1px solid #d4af37; color: #fff; border-radius: 5px;">
+        </div>
+
+        <div class="input-group">
+            <label>Select Product Media</label>
+            <input type="file" id="pMedia" multiple accept="image/*,video/*">
+        </div>
+
+<div class="input-group">
+    <label>Product Category</label>
+    <select id="pCategory" style="width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none;">
+        <option value="all">Select Category</option>
+        <option value="Watch">Luxury Watches</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Headphone">Premium Audio</option>
+        <option value="Clothing">Fashion</option>
+        <option value="Women">Women's Style</option>
+        <option value="Footwear">Footwear</option>
+        <option value="Perfume">Fragrances</option>
+        <option value="Jewelry">Jewelry</option>
+        <option value="Accessories">Accessories</option>
+    </select>
+</div>
+
+        <div class="input-group">
+            <label>Product Details</label>
+            <textarea id="pDesc" rows="10" placeholder="Describe the product..."></textarea>
+        </div>
+        
+<div class="input-group">
+    <label>Long Description (Animated Page Details)</label>
+    <textarea id="pLongDesc" rows="15" placeholder="এনিমেটেড পেজে দেখানোর জন্য বিস্তারিত তথ্য এখানে লিখুন..."></textarea>
+</div>
+
+<div class="input-group">
+    <label>Upload Images for Description</label>
+    <input type="file" id="pDescMedia" multiple accept="image/*">
+    <p style="color: #d4af37; font-size: 12px; margin-top: 5px;">ডেসক্রিপশনের ভেতরে দেখানোর জন্য আলাদা ছবি এখানে আপলোড করুন।</p>
+</div>
+
+<div class="input-group">
+    <label>Product Warranty (Optional)</label>
+    <input type="text" id="productWarranty" placeholder="e.g. 1 Year Official / 6 Months Service">
+</div>
+
+        <button type="button" class="publish-btn" onclick="publishProduct()">PUBLISH PRODUCT</button>
+    </form>
+    
+    <p style="text-align:center; margin-top:20px;"><a href="index.html" style="color:#d4af37; text-decoration:none;">Go to Live Shop</a></p>
+</div>
+
+    <hr style="border: 0.5px solid #333; margin: 40px 0;">
+    <div id="admin-product-list" class="admin-container" style="margin-top: 20px;"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

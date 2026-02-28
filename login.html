@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SomuNexus | Authentication</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .auth-body { background: #000; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .auth-card { background: #111; width: 100%; max-width: 450px; padding: 40px; border-radius: 20px; border: 1px solid #d4af37; box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1); }
+        .auth-tabs { display: flex; justify-content: space-around; margin-bottom: 30px; border-bottom: 1px solid #222; }
+        .tab-btn { background: none; border: none; color: #888; padding: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .tab-btn.active { color: #d4af37; border-bottom: 2px solid #d4af37; }
+        
+        .form-group { margin-bottom: 15px; position: relative; }
+        .form-group i { position: absolute; left: 12px; top: 38px; color: #d4af37; }
+        .form-group label { display: block; margin-bottom: 5px; color: #ccc; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 10px 10px 35px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; outline: none; }
+        
+        .social-login { display: flex; gap: 10px; margin: 20px 0; }
+        .social-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+        .social-btn:hover { background: #222; border-color: #d4af37; }
+        
+        .auth-btn { width: 100%; padding: 12px; background: #d4af37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .hidden { display: none; }
+        /* ওটিপি বক্সের মূল ডিজাইন */
+.otp-premium-box {
+    margin-top: 15px;
+    padding: 20px;
+    background: #111; /* তোমার থিমের সাথে মিল রেখে কালো */
+    border: 1px solid #d4af37; /* গোল্ডেন বর্ডার */
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+    animation: otpSlideIn 0.5s ease-out; /* স্লাইডিং অ্যানিমেশন */
+}
+
+/* স্লাইডিং অ্যানিমেশন কিফ্রেম */
+@keyframes otpSlideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ইনপুট ফিল্ড ডিজাইন */
+.otp-premium-input {
+    width: 100% !important;
+    padding: 15px !important;
+    background: #000 !important;
+    border: 1px solid #333 !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    margin-bottom: 15px !important;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.otp-premium-input:focus {
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* প্রিমিয়াম বাটন ডিজাইন */
+.otp-premium-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #d4af37, #f3cf65);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+}
+
+.otp-premium-btn:hover {
+    background: #fff;
+    transform: scale(1.02);
+}
+
+/* মোবাইল ভিউ ফিক্স */
+@media screen and (max-width: 600px) {
+    .otp-premium-box {
+        padding: 15px;
+        width: 100%;
+    }
+}
+    </style>
+</head>
+<body class="auth-body">
+
+    <div class="auth-card">
+    <div class="back-to-site">
+    <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+        <h2 style="color: #d4af37; text-align: center; margin-bottom: 20px;">SOMUNEXUS</h2>
+        
+        <div class="auth-tabs">
+            <button class="tab-btn active" onclick="showForm('login')">Login</button>
+            <button class="tab-btn" onclick="showForm('signup')">Sign Up</button>
+        </div>
+
+    <div id="loginForm">
+        <form onsubmit="event.preventDefault(); handleLogin();">
+            <div class="form-group">
+                <label>Email or Phone</label>
+                <i class="fa fa-user"></i>
+                <input type="text" id="loginId" placeholder="Enter Email/Phone" name="username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <i class="fa fa-lock"></i>
+                <input type="password" id="loginPass" placeholder="Enter Password" name="password">
+
+            <i class="fa fa-eye" id="toggleRegPass" style=" position: absolute;
+                left: 90%;
+                top: 38%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                color: #888;
+                z-index: 2;
+                width: 20px; 
+                display: inline-block;">
+            </i>
+            <button type="submit" class="auth-btn" >SIGN IN</button>
+        </form>
+    </div>
+                       
+            <p style="color: #666; text-align: center; margin-top: 20px;">Or continue with</p>
+            <div class="social-login">
+                <button class="social-btn" onclick="loginWithGoogle()"><i class="fab fa-google" style="color: #ea4335;"></i> Google</button>
+                <button class="social-btn"><i class="fab fa-facebook" style="color: #1877f2;"></i> Facebook</button>
+                <div id="login-button-container"></div>
+            </div>
+<button class="social-btn" style="width: 100%; margin-bottom: 10px; cursor: pointer;" onclick="sendOTP()">
+    <i class="fa fa-phone"></i> Login with OTP
+</button>
+
+<div id="recaptcha-container"></div>
+
+<div id="otpInputSection" style="display:none; margin-top: 15px; padding: 20px; background: #000; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);">
+    <label style="color: #d4af37; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px; text-transform: uppercase;">Enter Phone Number</label>
+    
+    <input type="text" id="manualPhoneNumber" placeholder="017XXXXXXXX" 
+        style="width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 15px; outline: none; box-sizing: border-box;">
+    
+    <button onclick="triggerActualOTP()" 
+        style="width: 100%; padding: 12px; background: linear-gradient(45deg, #d4af37, #f3cf65); color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%;">
+        GET OTP
+    </button>
+<div id="verifyCodePart" style="display:none; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
+    <label style="color: #d4af37; font-size: 11px; font-weight: bold; display: block; margin-bottom: 8px;">ENTER 6-DIGIT CODE</label>
+    <input type="text" id="otpCodeInput" placeholder="XXXXXX" 
+        style="width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #d4af37; color: white; border-radius: 8px; margin-bottom: 12px; text-align: center; letter-spacing: 5px; font-size: 18px;">
+    <button onclick="verifyCustomOTP()" style="width: 100%; padding: 12px; background: #fff; color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">VERIFY & LOGIN</button>
+</div>
+</div>
+        </div>
+<div id="signupForm" class="hidden">
+    <form onsubmit="event.preventDefault(); handleSignup();">
+        <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+            <div class="form-group">
+                <label>Full Name</label>
+                <i class="fa fa-id-card"></i>
+                <input type="text" id="regName" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <i class="fa fa-phone"></i>
+                <input type="text" id="regPhone" name="username" placeholder="+8801..." required>
+            </div>
+            <div class="form-group">
+                <label>Email (Optional)</label>
+                <i class="fa fa-envelope"></i>
+                <input type="email" id="regEmail" placeholder="yourname@email.com">
+            </div>
+            <div class="form-group">
+                <label>Religion</label>
+                <i class="fa fa-hands-praying"></i>
+                <select id="regReligion">
+                    <option value="Islam">Islam</option>
+                    <option value="Hinduism">Hinduism</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Country</label>
+                <i class="fa fa-globe"></i>
+                <input type="text" id="regCountry" value="Bangladesh">
+            </div>
+            <div class="form-group">
+                <label>Shipping Address</label>
+                <i class="fa fa-truck"></i>
+                <textarea id="regAddress" style="width:100%; background:#1a1a1a; color:white; border:1px solid #333; border-radius:8px; padding:10px; padding-left: 40px;"></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 25px; width: 100%;">
+                <label style="display: block; margin-bottom: 8px; color: #ccc;">Password</label>
+                
+                <div style="position: relative; width: 100%; height: 48px;">
+                    <input type="password" id="regPass" name="password" placeholder="Create Password" style="
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%; 
+                        height: 100%; 
+                        background: #111; 
+                        border: 1px solid #333; 
+                        border-radius: 8px; 
+                        color: white; 
+                        padding: 0 45px; /* আইকনগুলোর জন্য দুই পাশে জায়গা রাখা হয়েছে */
+                        box-sizing: border-box; 
+                        outline: none;
+                        z-index: 1;" required>
+
+                    <i class="fa fa-lock" style="
+                        position: absolute; 
+                        left: 15px; 
+                        top: 15px; 
+                        color: #d4af37; 
+                        z-index: 2;
+                        pointer-events: none;"></i>
+
+                    <i class="fa fa-eye" id="toggleRegPass" style=" 
+                        position: absolute;
+                        right: 15px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        cursor: pointer;
+                        color: #888;
+                        z-index: 10;
+                        width: 20px; 
+                        display: inline-block;"></i>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="auth-btn">CREATE ACCOUNT</button>
+    </form>
+</div>
+    
+ <script type="module">
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNv18tFenJP9XpyL7cr9BaA3vg-gLUC3U",
+    authDomain: "somunexas.firebaseapp.com",
+    projectId: "somunexas",
+    databaseURL: "https://somunexas-default-rtdb.firebaseio.com", // এটি অবশ্যই দিন
+    storageBucket: "somunexas.firebasestorage.app",
+    messagingSenderId: "880413975961",
+    appId: "1:880413975961:web:838932e24b0644473b1f08"
+  };
+
+  // ১. অ্যাপটি ইনিশিয়ালাইজ করুন
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+  const provider = new GoogleAuthProvider();
+
+  window.db = db;
+  window.ref = ref;
+  window.set = set;
+  window.get = get;
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+  'size': 'invisible'
+});
+
+// ২. ফোন নম্বর পাঠানো
+// তোমার প্রথম ফাংশন: এটি শুধু বক্সটি দেখাবে
+window.sendOTP = function() {
+    document.getElementById('otpInputSection').style.display = 'block';
+    document.getElementById('otpInputSection').scrollIntoView({ behavior: 'smooth' });
+};
+
+// তোমার আসল লজিক: যা তুমি আমাকে পাঠিয়েছ (কোনো চেঞ্জ নেই)
+window.triggerActualOTP = function() {
+    // এখন আর prompt নয়, সরাসরি বক্স থেকে নম্বর নেবে
+    let inputNumber = document.getElementById('manualPhoneNumber').value;
+    
+    if (!inputNumber) return;
+
+    let phoneNumber = inputNumber.trim();
+    if (phoneNumber.startsWith("0")) {
+        phoneNumber = "+88" + phoneNumber;
+    } else if (!phoneNumber.startsWith("+")) {
+        phoneNumber = "+88" + phoneNumber;
+    }
+
+    const appVerifier = window.recaptchaVerifier; 
+
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+            window.confirmationResult = confirmationResult;
+            
+            // ৬ ডিজিটের কোডটি এখনো তোমার প্রিয় prompt হিসেবেই আসবে
+            document.getElementById('verifyCodePart').style.display = 'block';
+            alert("আপনার ফোনে পাঠানো ৬ ডিজিটের কোডটি নিচের বক্সে দিন।");
+            ////const code = prompt("আপনার ফোনে পাঠানো ৬ ডিজিটের কোডটি দিন:");            
+            ////if (!code) return;
+
+            confirmationResult.confirm(code).then(async (result) => {
+                const user = result.user;
+                
+                // তোমার পাঠানো ডাটাবেজ সেভিং লজিক (অপরিবর্তিত)
+                const userRef = window.ref(window.db, 'users/' + user.uid);
+                const snapshot = await window.get(userRef);
+                let userData;
+
+                if (snapshot.exists()) {
+                    userData = snapshot.val();
+                    userData.lastLogin = Date.now();
+                    userData.isLoggedIn = true;
+                } else {
+                    userData = {
+                        name: "Phone User",
+                        phone: user.phoneNumber,
+                        uid: user.uid,
+                        profilePic: "https://via.placeholder.com/150",
+                        religion: "Islam",
+                        country: "Bangladesh",
+                        isLoggedIn: true,
+                        lastLogin: Date.now()
+                    };
+                    await window.set(userRef, userData);
+                }
+
+                localStorage.setItem('userId', user.uid); 
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+
+                alert("Login Successful! Your profile is ready.");
+                window.location.href = "index.html";
+
+            }).catch((error) => {
+                alert("ভুল OTP দিয়েছেন!");
+                console.error(error);
+            });
+        }).catch((error) => {
+            console.error("Error:", error);
+            alert("SMS পাঠানো সম্ভব হয়নি।");
+        });
+}
+
+window.verifyCustomOTP = function() {
+    // ডিজাইন করা ইনপুট বক্স থেকে কোড নেবে
+    const code = document.getElementById('otpCodeInput').value.trim();
+    
+    if (!code) {
+        alert("দয়া করে ৬ ডিজিটের কোডটি দিন");
+        return;
+    }
+
+    // তোমার সেই অরিজাল confirmationResult লজিক যা তুমি আমাকে পাঠিয়েছিলে
+    window.confirmationResult.confirm(code).then(async (result) => {
+        const user = result.user;
+        
+        // তোমার ডাটাবেজ সেভিং লজিক (হুবহু তোমার কোড)
+        const userRef = window.ref(window.db, 'users/' + user.uid);
+        const snapshot = await window.get(userRef);
+        let userData;
+
+        if (snapshot.exists()) {
+            userData = snapshot.val();
+            userData.lastLogin = Date.now();
+            userData.isLoggedIn = true;
+        } else {
+            userData = {
+                name: "Phone User",
+                phone: user.phoneNumber,
+                uid: user.uid,
+                profilePic: "https://via.placeholder.com/150",
+                religion: "Islam",
+                country: "Bangladesh",
+                isLoggedIn: true,
+                lastLogin: Date.now()
+            };
+            await window.set(userRef, userData);
+        }
+
+        localStorage.setItem('userId', user.uid); 
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+
+        alert("Login Successful!");
+        window.location.href = "index.html";
+
+    }).catch((error) => {
+        alert("ভুল OTP দিয়েছেন!");
+    });
+}
+  // ২. ফাংশনটিকে উইন্ডো অবজেক্টে রাখুন যাতে বাটন থেকে কাজ করে
+  window.loginWithGoogle = function() {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        
+        const userData = {
+            name: user.displayName,
+            email: user.email,
+            profilePic: user.photoURL,
+            uid: user.uid,
+            lastLogin: Date.now()
+        };
+
+        // ৩. সরাসরি ডাটাবেজে সেভ করা
+        set(ref(db, 'users/' + user.uid), userData)
+          .then(() => {
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            localStorage.setItem('userId', user.uid);
+            alert("Success! Welcome " + user.displayName);
+            window.location.href = "index.html";
+          })
+          .catch((error) => {
+            console.error("Database Error:", error);
+            alert("Database Error: " + error.message);
+          });
+
+      }).catch((error) => {
+        console.error("Login Error:", error);
+        alert("Google Error: " + error.message);
+      });
+  }
+  
+</script>
+
+<script src="login-script.js"></script>
+
+</body>
+</html>

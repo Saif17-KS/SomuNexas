@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | SomuNexus</title>
+    <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --gold: #d4af37; --dark: #0a0a0a; --gray: #1a1a1a; }
+        body { background: var(--dark); color: white; font-family: 'Poppins', sans-serif; margin: 0; }
+        .product-page-container { max-width: 1200px; margin: 50px auto; padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .image-section { position: sticky; top: 20px; }
+        .main-img-container { width: 100%; aspect-ratio: 1/1; background: var(--gray); border-radius: 15px; overflow: hidden; border: 1px solid #333; cursor: zoom-in; }
+        .main-img-container img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s ease; }
+        .thumb-gallery { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; }
+        .thumb-gallery img { width: 80px; height: 80px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; opacity: 0.6; }
+        .thumb-gallery img.active { border-color: var(--gold); opacity: 1; }
+        .info-section h1 { color: var(--gold); font-size: 2rem; margin-bottom: 10px; }
+        .price-tag { font-size: 1.8rem; color: #fff; margin-bottom: 20px; font-weight: bold; }
+        .detailed-description { grid-column: span 2; margin-top: 50px; border-top: 1px solid #333; padding-top: 30px; }
+        .desc-text { line-height: 1.8; color: #ccc; white-space: pre-line; margin-bottom: 30px; }
+        .desc-images img { width: 100%; border-radius: 10px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .product-page-container { grid-template-columns: 1fr; } .detailed-description { grid-column: span 1; } }
+        /* ইমেজ সেকশনকে স্টিকি এবং ট্রানজিশনাল করা */
+.image-section {
+    position: sticky;
+    top: 20px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+}
+
+/* স্ক্রল করলে ইমেজ ছোট হওয়ার ক্লাস (এটি JS দিয়ে কন্ট্রোল হবে) */
+.image-section.scrolled {
+    transform: scale(0.7); /* ইমেজ ৩০% ছোট হবে */
+    top: 10px;
+    opacity: 0.9;
+}
+
+/* ডিটেইলস সেকশন যেন ইমেজের নিচে না ঢোকে */
+.detailed-description {
+    position: relative;
+    background: var(--dark);
+    z-index: 11; /* ইমেজের চেয়ে উপরে থাকবে */
+    margin-top: 50px;
+    padding-top: 30px;
+}
+.trust-badges {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: #151515;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+}
+
+.badge-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.badge-item i {
+    font-size: 1.5rem;
+    color: var(--gold);
+    width: 30px;
+}
+
+.badge-item strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--gold);
+}
+
+.badge-item p {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+}
+.back-home {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(212, 175, 55, 0.9); /* Gold color */
+    color: black;
+    padding: 10px 18px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-home:hover {
+    background: white;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .back-home {
+        top: 10px;
+        left: 10px;
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+}
+.main-header {
+    background: #111; /* হালকা কালো */
+    border-bottom: 1px solid #333;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.brand-logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.brand-logo span {
+    color: var(--gold); /* গোল্ড কালার */
+    font-style: italic;
+}
+
+.nav-back {
+    color: #888;
+    font-size: 20px;
+    text-decoration: none;
+    transition: 0.3s;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #1a1a1a;
+}
+
+.nav-back:hover {
+    color: var(--gold);
+    background: #222;
+}
+
+/* মোবাইলের জন্য ছোট অ্যাডজাস্টমেন্ট */
+@media (max-width: 768px) {
+    .brand-logo {
+        font-size: 20px;
+    }
+}
+/* অ্যাকশন বাটন কন্টেইনার */
+.action-btns {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* ADD TO CART বাটন স্টাইল */
+.btn-cart {
+    flex: 1;
+    padding: 15px;
+    background: transparent;
+    border: 2px solid #d4af37;
+    color: #d4af37;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.btn-cart:hover {
+    background: #d4af37;
+    color: #000;
+}
+
+/* WhatsApp BUY NOW বাটন (গর্জিয়াস ডিজাইন) */
+.btn-whatsapp {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: white !important;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    transition: 0.4s;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    animation: whatsappPulse 2s infinite; /* গ্লো অ্যানিমেশন */
+}
+
+/* বাটনের ভেতর দিয়ে যাওয়ার Shine ইফেক্ট */
+.btn-whatsapp::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.5s;
+    animation: shineEffect 3s infinite;
+}
+
+/* হোভার করলে একটু বড় হবে */
+.btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+    filter: brightness(1.1);
+}
+
+/* গ্লো অ্যানিমেশন লজিক */
+@keyframes whatsappPulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+@keyframes shineEffect {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
+/*chat css*/
+/* চ্যাট উইজেট কন্টেইনার */
+#nexus-chat-wrapper { position: fixed; bottom: 10px; right: 25px; z-index: 10000; font-family: 'Poppins', sans-serif; }
+
+/* চ্যাট বাবল বাটন */
+#chat-bubble { bottom: 20px; right: 10px; width: 40px; height: 40px; background: linear-gradient(135deg, #d4af37, #aa8928); border: none; border-radius: 50%; color: black; font-size: 26px; cursor: pointer; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+#chat-bubble:hover { transform: scale(1.1) rotate(5deg); }
+
+/* চ্যাট উইন্ডো */
+#nexus-chat-window { width: 360px; height: 500px; background: #0a0a0a; border: 1px solid #333; border-radius: 20px; position: absolute; bottom: 80px; right: 0; display: flex; flex-direction: column; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-origin: bottom right; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+.chat-hidden { opacity: 0; transform: scale(0) translateY(100px); pointer-events: none; }
+
+/* হেডার ডিজাইন */
+.chat-header { background: #151515; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
+.header-info { display: flex; align-items: center; gap: 12px; }
+.header-info img { width: 38px; height: 38px; border-radius: 50%; border: 1px solid #d4af37; background: #000; }
+.header-info h4 { margin: 0; color: #d4af37; font-size: 15px; font-weight: 600; }
+.status-dot { width: 8px; height: 8px; background: #25d366; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #25d366; }
+.close-chat-btn { background: transparent; border: none; color: #888; cursor: pointer; font-size: 18px; }
+
+/* চ্যাট বডি */
+.chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+.msg { padding: 10px 16px; border-radius: 18px; max-width: 85%; font-size: 13.5px; line-height: 1.5; animation: msgFade 0.3s ease-out; }
+@keyframes msgFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.bot-msg { background: #1a1a1a; color: #ddd; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #222; }
+.user-msg { background: linear-gradient(135deg, #d4af37, #b8962e); color: black; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
+
+/* চ্যাট ফুটার */
+.chat-footer { padding: 12px; background: #151515; display: flex; gap: 10px; border-top: 1px solid #222; }
+.chat-footer input { flex: 1; background: #000; border: 1px solid #333; padding: 10px 15px; border-radius: 25px; color: white; outline: none; font-size: 13px; }
+.chat-footer input:focus { border-color: #d4af37; }
+#send-btn { background: #d4af37; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: 0.3s; color: black; }
+#send-btn:hover { background: #fff; transform: scale(1.05); }
+
+/* মোবাইল রেসপন্সিভনেস */
+@media (max-width: 480px) {
+    #nexus-chat-window { width: calc(100vw - 40px); height: 75vh; right: -10px; bottom: 80px; }
+    #nexus-chat-wrapper { bottom: 20px; right: 20px; }
+}
+#admin-typing-status {
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.custom-context-menu {
+    user-select: none;
+    -webkit-user-select: none;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+/*End chat css*/
+    </style>
+</head>
+<body>
+<a href="index.html" class="back-home">
+    <i class="fas fa-home"></i> Back to Shop
+</a>
+<header class="main-header">
+    <div class="header-container">
+        <a href="index.html" class="nav-back">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        
+        <a href="index.html" class="brand-logo">
+            Somu<span>Nexus</span>
+        </a>
+
+        <div style="width: 40px;"></div>
+    </div>
+</header>
+
+<div class="product-page-container">
+    <div class="image-section">
+        <div class="main-img-container" id="zoomContainer">
+            <img id="mainImg" src="" alt="Product Image">
+        </div>
+        <div class="thumb-gallery" id="thumbGallery"></div>
+    </div>
+
+    <div class="info-section">
+        <h1 id="pTitle">Loading...</h1>
+        <div class="price-tag" id="pPrice">0 TK</div>
+        <p id="pShortDesc" style="color: #bbb;"></p>
+        <div class="action-btns">
+            <button class="btn-cart" id="detailsAddToCartBtn" onclick="addToCartFromDetails()">ADD TO CART</button>
+            <a href="#" id="waBtn" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i> BUY NOW</a>
+        </div>
+
+    <div class="trust-badges">
+    <div class="badge-item">
+        <i class="fas fa-shipping-fast"></i>
+        <div>
+            <strong>Home Delivery</strong>
+            <p>Inside Dhaka: 2-3 Days | Outside: 3-5 Days</p>
+        </div>
+    </div>
+    <div class="badge-item">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <strong>Official Warranty</strong>
+            <p id="pWarranty">Loading Warranty...</p>
+        </div>
+    </div>
+    <div class="badge-item">
+        <i class="fas fa-check-circle"></i>
+        <div>
+            <strong>7 Days Replacement</strong>
+            <p>100% money back guarantee for defects</p>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <div class="detailed-description">
+        <h2 style="color: var(--gold);">Product Details</h2>
+        <div id="pLongDescText" class="desc-text"></div>
+        <div id="pDescImages" class="desc-images"></div>
+    </div>
+</div>
+
+<div id="nexus-chat-wrapper">
+    <div id="nexus-chat-window" class="chat-hidden">
+        <div class="chat-header">
+            <div class="header-info">
+                <img src="icon/Mekxus_logo_no bg.png" alt="SomuNexus Logo">
+                <div>
+                    <h4>SomuNexus Support</h4>
+                    <span class="status-dot"></span> <small>Online</small>
+                    <small id="admin-typing-status" style="color: #25d366; display: none; font-style: italic;">Support is typing...</small>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="close-chat-btn"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div id="chat-messages" class="chat-body">
+            <div class="msg bot-msg">হ্যালো! SomuNexus-এ আপনাকে স্বাগতম। আমি কীভাবে সাহায্য করতে পারি?</div>
+        </div>
+
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="আপনার মেসেজ লিখুন..." autocomplete="off">
+            <button id="send-btn" onclick="sendNexusMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <button id="chat-bubble" onclick="toggleChat()">
+        <i class="fas fa-comment-dots"></i>
+        <span class="notification-badge" id="chat-notify" style="display:none;">1</span>
+    </button>
+</div>
+
+    <button id="chat-bubble" onclick="toggleChat()">
+        <i class="fas fa-comment-dots"></i>
+        <span class="notification-badge" id="chat-notify" style="display:none;">1</span>
+    </button>
+</div>
+
+<script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+    // আপনার দেওয়া Firebase কনফিগ
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNv18tFenJP9XpyL7cr9BaA3vg-gLUC3U",
+        authDomain: "somunexas.firebaseapp.com",
+        databaseURL: "https://somunexas-default-rtdb.firebaseio.com",
+        projectId: "somunexas",
+        storageBucket: "somunexas.firebasestorage.app",
+        messagingSenderId: "880413975961",
+        appId: "1:880413975961:web:838932e24b0644473b1f08",
+        measurementId: "G-WL3RCDT4JS"
+    };
+
+    // ডুপ্লিকেট অ্যাপ এরর এড়ানোর জন্য চেক
+    const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    const db = getDatabase(app);
+
+    // URL থেকে আইডি নেওয়া
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    if (productId) {
+        const productsRef = ref(db, 'products');
+        onValue(productsRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // আপনার ডাটাবেজের আইডি ফিল্ডের সাথে ম্যাচ করা
+                const productKey = Object.keys(data).find(key => data[key].id == productId);
+                const product = data[productKey];
+
+                if (product) {
+                    // ১. বেসিক তথ্য সেট করা
+                    document.getElementById('pTitle').innerText = product.name;
+                    document.getElementById('pPrice').innerText = (product.currentPrice || product.price) + " TK";
+                    document.getElementById('pShortDesc').innerText = product.desc || "";
+                    document.getElementById('pWarranty').innerText = product.warranty || "No Official Warranty";
+                    
+                    const longDesc = document.getElementById('pLongDescText');
+                    if(longDesc) longDesc.innerText = product.longDescription || "বিস্তারিত তথ্য শীঘ্রই যুক্ত করা হবে।";
+
+                    // ২. ইমেজ হ্যান্ডলিং
+                    const mainImg = document.getElementById('mainImg');
+                    // images অথবা media যে নামেই থাকুক ডাটা খুঁজে নেবে
+                    const allImages = product.images || (product.media ? product.media.map(m => m.url) : []);
+                    
+                    if(allImages.length > 0) {
+                        mainImg.src = allImages[0];
+                        const gallery = document.getElementById('thumbGallery');
+                        if(gallery) {
+                            gallery.innerHTML = ''; 
+                            allImages.forEach((url, index) => {
+                                const img = document.createElement('img');
+                                img.src = url;
+                                if(index === 0) img.classList.add('active');
+                                img.onclick = () => {
+                                    mainImg.src = url;
+                                    document.querySelectorAll('.thumb-gallery img').forEach(i => i.classList.remove('active'));
+                                    img.classList.add('active');
+                                };
+                                gallery.appendChild(img);
+                            });
+                        }
+                    }
+
+                    // ৩. ডেসক্রিপশন ইমেজ (যদি অ্যাডমিন প্যানেল থেকে আপলোড করা থাকে)
+                    const descDiv = document.getElementById('pDescImages');
+                    if(descDiv) {
+                        descDiv.innerHTML = '';
+                        if(product.descriptionImages) {
+                            product.descriptionImages.forEach(url => {
+                                const img = document.createElement('img');
+                                img.src = url;
+                                descDiv.appendChild(img);
+                            });
+                        }
+                    }
+
+                    // ৪. WhatsApp লিঙ্ক
+                    const waBtn = document.getElementById('waBtn');
+                    if(waBtn) {
+                        waBtn.href = `https://wa.me/8801826435150?text=Hello, I want to buy ${product.name} (ID: ${product.id})`;
+                    }
+                    // --- ৫. স্টক চেক এবং বাটন আপডেট (এখানে বসাও) ---
+                    let stockVal = 0;
+                    if (product.stock !== undefined && product.stock !== null && product.stock !== "") {
+                        stockVal = parseInt(product.stock);
+                    }
+
+                    const cartBtn = document.getElementById('detailsAddToCartBtn');
+
+                    if (stockVal <= 0) {
+                        // স্টক না থাকলে বাটন "STOCK OUT" দেখাবে
+                        if(cartBtn) {
+                            cartBtn.innerText = "STOCK OUT";
+                            cartBtn.disabled = true;
+                            cartBtn.style.background = "#444";
+                            cartBtn.style.color = "#888";
+                            cartBtn.style.borderColor = "#444";
+                            cartBtn.style.cursor = "not-allowed";
+                        }
+                        // হোয়াটসঅ্যাপ বাটন স্টক আউট মোড
+                        if(waBtn) {
+                            waBtn.style.opacity = "0.6";
+                            waBtn.style.pointerEvents = "none"; 
+                            waBtn.innerHTML = `<i class="fab fa-whatsapp"></i> STOCK OUT`;
+                        }
+                    } else {
+                        // স্টক থাকলে বাটন স্বাভাবিক থাকবে
+                        if(cartBtn) {
+                            cartBtn.innerText = "ADD TO CART";
+                            cartBtn.disabled = false;
+                            cartBtn.style.background = "transparent";
+                            cartBtn.style.color = "#d4af37";
+                            cartBtn.style.borderColor = "#d4af37";
+                            cartBtn.style.cursor = "pointer";
+                        }
+                        if(waBtn) {
+                            waBtn.style.opacity = "1";
+                            waBtn.style.pointerEvents = "auto";
+                            waBtn.innerHTML = `<i class="fab fa-whatsapp"></i> BUY NOW`;
+                        }
+                    }
+                    // --- স্টক চেক শেষ ---
+                }
+            }
+        });
+    }
+
+    // ৫. কোয়ান্টিটি বাটন ফাংশন
+    window.updateQty = function(val) {
+        const qtyVal = document.getElementById('qtyVal');
+        let current = parseInt(qtyVal.innerText);
+        qtyVal.innerText = Math.max(1, current + val);
+    };
+
+    // ৬. জুম ইফেক্ট (ডেস্কটপের জন্য)
+    const zoomContainer = document.getElementById('zoomContainer');
+    const mainImg = document.getElementById('mainImg');
+    if(zoomContainer && mainImg) {
+        zoomContainer.addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = zoomContainer.getBoundingClientRect();
+            const x = ((e.pageX - left) / width) * 100;
+            const y = ((e.pageY - top) / height) * 100;
+            mainImg.style.transformOrigin = `${x}% ${y}%`;
+            mainImg.style.transform = "scale(1.8)";
+        });
+        zoomContainer.addEventListener('mouseleave', () => {
+            mainImg.style.transform = "scale(1)";
+        });
+}
+window.addEventListener('scroll', () => {
+    const imageSection = document.querySelector('.image-section');
+    if (window.scrollY > 200) { // ২০০ পিক্সেল নিচে নামলে ইমেজ ছোট হবে
+        imageSection.classList.add('scrolled');
+    } else {
+        imageSection.classList.remove('scrolled');
+    }
+});
+// এই অংশটি অবশ্যই product.html এর স্ক্রিপ্টের ভেতর থাকতে হবে
+// window অবজেক্টে ফাংশনটি এক্সপোজ করা হচ্ছে যেন HTML বাটন থেকে এটি পাওয়া যায়
+window.addToCartFromDetails = function() {
+    // ১. প্রয়োজনীয় তথ্য সংগ্রহ করা
+    const name = document.getElementById('pTitle').innerText;
+    const price = document.getElementById('pPrice').innerText.replace(' TK', '');
+    const img = document.getElementById('mainImg').src;
+    
+    // ২. URL থেকে প্রোডাক্ট আইডি সংগ্রহ করা (এটি না পাঠালে Firebase error দিবে)
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    // ৩. স্টক চেক করা
+    const cartBtn = document.getElementById('detailsAddToCartBtn');
+    const isStockOut = cartBtn ? cartBtn.disabled : false;
+
+    if (isStockOut) {
+        alert("Sorry, this product is out of stock!");
+        return;
+    }
+
+    // ৪. মেইন addToCart ফাংশন কল করা (আইডিসহ)
+    if (typeof window.addToCart === "function") {
+        if (!productId) {
+            console.error("Product ID not found in URL!");
+            return;
+        }
+        
+        // এখানে নাম, দাম, ছবি এবং আইডি পাঠানো হচ্ছে
+        window.addToCart(name, price, img, productId);
+        
+        alert("Product added to cart!"); 
+    } else {
+        console.error("Main addToCart function not found! Make sure script.js is loaded correctly.");
+    }
+};
+
+// ২. মেসেজ পাঠানোর ফাংশন
+////start chat option js/////
+
+// ১. চ্যাট উইন্ডো ওপেন/ক্লোজ করার ফাংশন
+window.toggleChat = function() {
+    const chatWin = document.getElementById('nexus-chat-window');
+    chatWin.classList.toggle('chat-hidden');
+    document.getElementById('chat-notify').style.display = 'none';
+};
+// ২. মেসেজ পাঠানোর ফাংশন
+////start chat option js/////
+
+// ১. চ্যাট উইন্ডো ওপেন/ক্লোজ করার ফাংশন
+window.toggleChat = function() {
+    const chatWin = document.getElementById('nexus-chat-window');
+    chatWin.classList.toggle('chat-hidden');
+    document.getElementById('chat-notify').style.display = 'none';
+};
+// ২. মেসেজ পাঠানোর ফাংশন
+// ১. ইউজার আইডি এবং নাম নির্ধারণের জন্য শক্তিশালী ফাংশন
+function getNexusUserData() {
+    let user = JSON.parse(localStorage.getItem('currentUser')) || {};
+    
+    // যদি লগইন না থাকে, তবে একটি স্থায়ী গেস্ট আইডি তৈরি করো
+    if (!user.uid && !user.id) {
+        let guestId = localStorage.getItem('chat_uid');
+        if (!guestId) {
+            guestId = "guest_" + Date.now();
+            localStorage.setItem('chat_uid', guestId);
+        }
+        user.id = guestId;
+        user.name = "Guest User";
+    }
+    
+    return {
+        id: user.uid || user.id,
+        name: user.name || "Guest User"
+    };
+}
+
+const nexusUser = getNexusUserData();
+
+// ২. মেসেজ পাঠানোর ফাংশন
+window.sendNexusMessage = function() {
+    const chatInput = document.getElementById('chat-input');
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    const chatRef = ref(db, `chats/${nexusUser.id}/messages`);
+    const newMsgRef = push(chatRef);
+    
+    const msgData = {
+        sender: nexusUser.name,
+        role: "user",
+        text: message,
+        status: "sent",
+        timestamp: Date.now()
+    };
+
+    set(newMsgRef, msgData).then(() => {
+        // অ্যাডমিন লিস্টের জন্য লাস্ট মেসেজ আপডেট
+        set(ref(db, `chats/${nexusUser.id}/lastMessage`), {
+            userName: nexusUser.name,
+            lastText: message,
+            timestamp: Date.now(),
+            userId: nexusUser.id,
+            unread: true
+        });
+        chatInput.value = '';
+    });
+};
+
+// ৩. রিয়েল-টাইমে মেসেজ রিসিভ করা (সঠিক পাথ ব্যবহার করে)
+const userMessagesRef = ref(db, `chats/${nexusUser.id}/messages`);
+onValue(userMessagesRef, (snapshot) => {
+    const chatBody = document.getElementById('chat-messages');
+    const data = snapshot.val();
+    
+    if (data) {
+        chatBody.innerHTML = ''; 
+        // Object.entries ব্যবহার করছি যাতে msgId পাওয়া যায়
+        Object.entries(data).forEach(([msgId, msg]) => {
+            const div = document.createElement('div');
+            div.className = msg.role === 'user' ? 'msg user-msg' : 'msg bot-msg';
+
+            let pressTimer;
+
+            // ব্রাউজারের ডিফল্ট মেনু বন্ধ করা
+            div.oncontextmenu = (e) => {
+    e.preventDefault();
+    window.showCustomerDeleteMenu(e, String(nexusUser.id), String(msgId), msg.timestamp);
+    return false;
+};
+
+            // ফোনের জন্য লং-প্রেস (Touch)
+            div.addEventListener('touchstart', (e) => {
+                clearTimeout(pressTimer);
+                pressTimer = setTimeout(() => {
+                    // touch ইভেন্টের জন্য পজিশন পাস করা হচ্ছে
+                    window.showCustomerDeleteMenu(e, nexusUser.id, msgId, msg.timestamp);
+                }, 700);
+            }, { passive: true });
+
+            div.addEventListener('touchend', () => clearTimeout(pressTimer));
+            div.addEventListener('touchmove', () => clearTimeout(pressTimer));
+            
+            // টেক্সট কন্টেন্ট
+            const span = document.createElement('span');
+            span.innerText = msg.text;
+            div.appendChild(span);
+
+            // নীল টিক (Seen Status)
+            if (msg.role === 'user' && msg.status === 'seen') {
+                const tick = document.createElement('i');
+                tick.className = 'fas fa-check-double';
+                tick.style.cssText = 'color: #34b7f1; font-size: 10px; margin-left: 5px;';
+                div.appendChild(tick);
+            }
+            chatBody.appendChild(div);
+        });
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+});
+
+// ৪. টাইপিং এবং সিন স্ট্যাটাস লজিক (এন্টার বাটন সহ)
+const chatInputField = document.getElementById('chat-input');
+
+if (chatInputField) {
+    chatInputField.addEventListener('input', () => {
+        set(ref(db, `chats/${nexusUser.id}/typing/user`), true);
+        clearTimeout(window.typingTimeout);
+        window.typingTimeout = setTimeout(() => {
+            set(ref(db, `chats/${nexusUser.id}/typing/user`), false);
+        }, 2000);
+    });
+
+    // এন্টার বাটনে মেসেজ পাঠানোর লজিক
+    chatInputField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // নতুন লাইন তৈরি হওয়া বন্ধ করবে
+            window.sendNexusMessage(); // মেসেজ পাঠানোর ফাংশন কল করবে
+        }
+    });
+}
+
+// অ্যাডমিন টাইপিং এবং অটো সিন
+onValue(ref(db, `chats/${nexusUser.id}/typing/admin`), (snapshot) => {
+    const isTyping = snapshot.val();
+    const adminStatus = document.getElementById('admin-typing-status');
+    if (adminStatus) adminStatus.style.display = isTyping ? 'block' : 'none';
+
+    // চ্যাট খোলা থাকলে মেসেজ Seen করা
+    onValue(ref(db, `chats/${nexusUser.id}/messages`), (msgSnapshot) => {
+        const messages = msgSnapshot.val();
+        if (messages) {
+            Object.keys(messages).forEach(msgId => {
+                if (messages[msgId].role === 'admin' && messages[msgId].status !== 'seen') {
+                    set(ref(db, `chats/${nexusUser.id}/messages/${msgId}/status`), 'seen');
+                }
+            });
+        }
+    }, { onlyOnce: true });
+});
+
+window.showCustomerDeleteMenu = function(e, uid, msgId, msgTimestamp) {
+    if (!msgTimestamp) return;
+
+    const currentTime = Date.now();
+    // মিলিসেকেন্ড থেকে সেকেন্ডে পার্থক্য বের করা
+    const diffInSeconds = (currentTime - msgTimestamp) / 1000;
+    
+    console.log("Diff in seconds:", diffInSeconds);
+
+    // ১০ মিনিট = ৬০০ সেকেন্ড
+    if (diffInSeconds > 600) { 
+        console.log("সময় পার হয়ে গেছে (১০ মিনিট লিমিট)!");
+        alert("১০ মিনিট পার হয়ে যাওয়ায় মেসেজটি আর ডিলিট করা সম্ভব নয়।");
+        return; 
+    }
+
+    // আগের কোনো মেনু থাকলে সরিয়ে ফেলা
+    const oldMenu = document.querySelector('.custom-context-menu');
+    if (oldMenu) oldMenu.remove();
+
+    const menu = document.createElement('div');
+    menu.className = 'custom-context-menu';
+    
+    // মোবাইল এবং পিসির জন্য সঠিক পজিশন বের করা
+let posX, posY;
+if (e.touches && e.touches[0]) {
+    // মোবাইল টাচ পজিশন
+    posX = e.touches[0].clientX;
+    posY = e.touches[0].clientY;
+} else {
+    // পিসি মাউস পজিশন
+    posX = e.clientX;
+    posY = e.clientY;
+}
+
+// মেনু যেন স্ক্রিনের বাইরে না যায় (ডান থেকে বামে নিয়ে আসা)
+const menuWidth = 180; // মেনুর আনুমানিক প্রস্থ
+const screenWidth = window.innerWidth;
+
+if (posX + menuWidth > screenWidth) {
+    posX = posX - menuWidth; // যদি ডান দিকে জায়গা না থাকে, তবে বামে সরবে
+}
+
+menu.style.cssText = `
+    position: fixed !important;
+    top: ${posY}px;
+    left: ${posX}px;
+    background: #1a1a1a;
+    border: 1px solid #d4af37;
+    z-index: 10000000 !important;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    color: white;
+    cursor: pointer;
+    min-width: ${menuWidth}px; /* বক্সের সাইজ নির্দিষ্ট করা হলো */
+    white-space: nowrap; /* লেখা যেন না ভাঙ্গে */
+`;
+
+    menu.innerHTML = `<div onclick="window.customerDeleteForEveryone('${uid}', '${msgId}')" 
+    style="color: #ff4d4d; font-weight: bold; white-space: nowrap; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+    🔥 Delete for Everyone
+    </div>`;
+    
+    document.body.appendChild(menu);
+
+    // মেনুর বাইরে ক্লিক করলে সেটি বন্ধ হয়ে যাবে
+    setTimeout(() => {
+        const closeMenu = () => {
+            menu.remove();
+            document.removeEventListener('click', closeMenu);
+        };
+        document.addEventListener('click', closeMenu);
+    }, 100);
+};
+window.customerDeleteForEveryone = function(uid, msgId) {
+    if (!uid || !msgId) return;
+
+    if (confirm("আপনি কি নিশ্চিত যে এই মেসেজটি সবার জন্য ডিলিট করবেন?")) {
+        // ফায়ারবেস পাথ (Path)
+        const pathStr = `chats/${uid}/messages/${msgId}`;
+        
+        // এখানে সরাসরি ইম্পোর্ট করা মডিউল ব্যবহার করছি
+        // মনে রাখবে: মডিউল স্কোপের ভেতরে থাকলে ref এবং remove সরাসরি কাজ করবে
+        try {
+            const messageRef = ref(db, pathStr);
+            
+            remove(messageRef)
+                .then(() => {
+                    console.log("সফলভাবে ডিলিট হয়েছে!");
+                    // পপ-আপ মেনু বন্ধ করা
+                    const menu = document.querySelector('.custom-context-menu');
+                    if (menu) menu.remove();
+                })
+                .catch((error) => {
+                    console.error("Firebase Remove Error:", error);
+                    alert("ডিলিট করতে সমস্যা হয়েছে: " + error.message);
+                });
+        } catch (err) {
+            console.error("Reference Error:", err);
+            alert("সিস্টেম এরর! পেজটি একবার রিফ্রেশ দিন।");
+        }
+    }
+};
+///End chat js///
+</script>
+<script type="module" src="script.js"></script>
+</body>
+</html>

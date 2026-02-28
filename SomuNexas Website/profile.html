@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SomuNexus | My Profile</title>
+    <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-body { background: #000; color: white; padding: 50px 20px; font-family: 'Poppins', sans-serif; }
+        .profile-card { max-width: 600px; margin: auto; background: #111; padding: 30px; border-radius: 20px; border: 1px solid #d4af37; }
+        .profile-pic-box { text-align: center; margin-bottom: 30px; position: relative; }
+        .profile-pic-box img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #d4af37; object-fit: cover; }
+        .edit-pic-btn { margin-top: 10px; display: block; width: 100%; font-size: 12px; color: #888; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #d4af37; margin-bottom: 8px; font-size: 14px; }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 8px; outline: none; 
+        }
+        .save-btn { width: 100%; padding: 15px; background: #d4af37; color: black; border: none; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .save-btn:hover { background: white; }
+
+        .p-tab {
+        background: none; border: none; color: #888; cursor: pointer; padding: 5px 10px; font-weight: bold;
+        }
+        .p-tab.active {
+        color: #d4af37; border-bottom: 2px solid #d4af37;
+        }
+        .profile-section {
+        animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+        }
+        /* মোবাইল ভিউ এবং স্ক্রল ফিক্স */
+/* মোবাইল ভিউ এবং স্ক্রল ফিক্স */
+@media screen and (max-width: 600px) {
+    /* পুরো পেজের ডানে-বামে নড়াচড়া বন্ধ */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .profile-body {
+        padding: 15px 10px !important;
+    }
+
+    /* প্রোফাইল কার্ড মোবাইলে স্ক্রিনের সাথে লেগে থাকবে */
+    .profile-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px 15px !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ইনলাইন ফ্লেক্স বক্সগুলো (Religion, Country, DOB, Gender) ওপর-নিচ করা */
+    div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    /* যেগুলোতে flex: 1 আছে সেগুলো পুরো জায়গা নেবে */
+    div[style*="flex: 1"] {
+        flex: none !important;
+        width: 100% !important;
+    }
+
+    /* ট্যাব মেনুকে ডানে-বামে স্ক্রল করার ব্যবস্থা */
+    .profile-tabs {
+        display: flex !important;
+        flex-direction: row !important; /* ট্যাব পাশাপাশি থাকবে */
+        overflow-x: auto !important; /* স্ক্রল চালু */
+        white-space: nowrap;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .p-tab {
+        flex: 0 0 auto !important;
+        padding: 10px 15px !important;
+    }
+
+    /* ইনপুট বক্সগুলো যেন স্ক্রিন থেকে বেরিয়ে না যায় */
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* অর্ডার কার্ডের ভেতরের কন্টেন্ট (ছবি ও টেক্সট পাশাপাশি রাখার জন্য) */
+    .order-card div[style*="display: flex"] {
+        flex-direction: row !important; 
+        align-items: center !important;
+    }
+}
+/* Update Password বাটন ডিজাইন */
+.update-pw-btn {
+    background: linear-gradient(to bottom, #f3cf65, #b8860b); /* গোল্ডেন গ্রেডিয়েন্ট */
+    color: #000; /* টেক্সট কালার কালো */
+    font-weight: bold;
+    font-size: 16px;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 50px; /* রাউন্ড শেপ */
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); /* হালকা গ্লো */
+    transition: all 0.3s ease; /* অ্যানিমেশন স্মুথ করার জন্য */
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+/* মাউস নিলে (Hover) যা হবে */
+.update-pw-btn:hover {
+    background: linear-gradient(to bottom, #fff380, #d4af37); /* উজ্জ্বল গোল্ডেন */
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); /* ছবির মতো সাদা-গোল্ডেন গ্লো */
+    transform: scale(1.05); /* হালকা বড় হবে */
+}
+
+/* ক্লিক করার সময় (Active) */
+.update-pw-btn:active {
+    transform: scale(0.98);
+}
+/* Premium Logout Button Design */
+.logout-container {
+    text-align: center;
+    margin: 25px 0;
+    padding: 0 15px;
+}
+
+.premium-logout-btn {
+    background: linear-gradient(135deg, #ff4d4d 0%, #b30000 100%);
+    color: white;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 12px 25px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+    width: 100%;
+    max-width: 280px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* PC Hover Animation */
+@media (min-width: 769px) {
+    .premium-logout-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
+        border-color: #d4af37;
+        background: linear-gradient(135deg, #ff1a1a 0%, #800000 100%);
+    }
+}
+
+/* Mobile Active Animation */
+.premium-logout-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Animation */
+.premium-logout-btn i {
+    transition: transform 0.3s ease;
+}
+
+.premium-logout-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* অ্যানিমেটেড ট্র্যাকিং বার */
+.track { position: relative; background-color: #222; height: 4px; display: flex; justify-content: space-between; align-items: center; margin: 40px 10px 25px 10px; border-radius: 5px; }
+.progress-line { position: absolute; top: 0; left: 0; height: 100%; background: #d4af37; z-index: 1; transition: width 1s ease; }
+.track-step { position: relative; display: flex; flex-direction: column; align-items: center; z-index: 2; }
+.track-step i { background: #111; width: 30px; height: 30px; border-radius: 50%; line-height: 26px; text-align: center; border: 2px solid #333; color: #555; font-size: 12px; transition: 0.5s; }
+.track-step.active i { border-color: #d4af37; color: #000; background: #d4af37; box-shadow: 0 0 10px #d4af37; }
+.track-step span { position: absolute; top: 35px; font-size: 9px; color: #555; text-transform: uppercase; white-space: nowrap; font-weight: bold; }
+.track-step.active span { color: #d4af37; }
+/*product order notification*/
+/* প্রিমিয়াম গোল্ডেন নোটিফিকেশন ডিজাইন */
+#custom-notification {
+    position: fixed;
+    top: -100px; /* শুরুতে স্ক্রিনের বাইরে থাকবে */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid #d4af37;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    z-index: 10000;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+#custom-notification.show {
+    top: 25px; /* স্ক্রিনে নেমে আসবে */
+}
+
+.noti-icon {
+    background: #d4af37;
+    color: #000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    animation: bell-ring 2s infinite;
+}
+
+@keyframes bell-ring {
+    0%, 100% { transform: rotate(0); }
+    10%, 30%, 50% { transform: rotate(15deg); }
+    20%, 40%, 60% { transform: rotate(-15deg); }
+}
+/*End product order notification*/
+
+</style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+</head>
+<body class="profile-body">
+
+    <div class="profile-card">
+        <h2 style="text-align:center; color:#d4af37; margin-bottom:30px;">MY PROFILE</h2>
+        
+        <div class="profile-pic-box">
+            <img id="displayPic" src="https://via.placeholder.com/120" alt="Profile">
+            <input type="file" id="uploadPic" class="edit-pic-btn" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="editName">
+        </div>
+
+        <div style="display: flex; gap: 15px;">
+            <div class="form-group" style="flex: 1;">
+                <label>Religion</label>
+                <select id="editReligion">
+                    <option value="Islam">Islam</option>
+                    <option value="Hinduism">Hinduism</option>
+                    <option value="Christianity">Christianity</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Country</label>
+                <input type="text" id="editCountry">
+            </div>
+        </div>
+
+<div style="display: flex; gap: 15px; margin-top: 15px;">
+    <div class="form-group" style="flex: 1;">
+        <label>Date of Birth</label>
+        <input type="date" id="editDOB" style="width: 100%; padding: 12px; background: #1a1a1a; color: white; border: 1px solid #333; border-radius: 8px;">
+    </div>
+    <div class="form-group" style="flex: 1;">
+        <label>Gender</label>
+        <select id="editGender" style="width: 100%; padding: 12px; background: #1a1a1a; color: white; border: 1px solid #333; border-radius: 8px;">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Contact Number</label>
+    <input type="text" id="editContact" placeholder="e.g. +8801XXXXXXXXX">
+</div>
+
+<div class="form-group">
+    <label>Email Address</label>
+    <input type="email" id="editEmail" placeholder="e.g. example@mail.com">
+</div>
+
+        <div class="form-group">
+            <label>Shipping Address</label>
+            <textarea id="editAddress" rows="3"></textarea>
+        </div>
+
+<div id="address-book-container" style="margin-top: 20px; border: 1px dashed #d4af37; padding: 15px; border-radius: 10px; background: #151515;">
+    <h4 style="color: #d4af37; font-size: 14px; margin-bottom: 10px; text-transform: uppercase;">Saved Addresses</h4>
+    
+    <div id="saved-address-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+        <p style="color: #666; font-size: 12px;">No addresses saved yet.</p>
+    </div>
+
+    <button type="button" onclick="window.openAddressModal()" style="background: none; border: 1px solid #d4af37; color: #d4af37; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold; width: 100%;">
+        <i class="fas fa-plus"></i> ADD NEW ADDRESS
+    </button>
+</div>
+
+        <button class="save-btn" onclick="saveProfile()">UPDATE PROFILE</button>
+                    <div class="logout-container">
+                        <button class="premium-logout-btn" onclick="logoutUser()">
+                            <i class="fas fa-sign-out-alt"></i> LOGOUT
+                        </button>
+                    </div>
+        <p style="text-align:center; margin-top:20px;"><a href="index.html" style="color:#888; text-decoration:none;">Back to Home</a></p>
+    </div>
+
+    <div id="cropModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; padding:20px; text-align:center;">
+    <div style="max-width:400px; margin:auto; background:#111; padding:20px; border-radius:10px;">
+        <h3 style="color:#d4af37;">Adjust Photo</h3>
+        <div style="height:300px; overflow:hidden; background:#000;">
+            <img id="cropImage" style="max-width:100%;">
+        </div>
+        <button onclick="cropAndSave()" style="margin-top:20px; padding:10px 20px; background:#d4af37; border:none; cursor:pointer; font-weight:bold;">CROP & SAVE</button>
+        <button onclick="closeModal()" style="margin-top:20px; padding:10px 20px; background:#444; color:white; border:none; cursor:pointer;">CANCEL</button>
+    </div>
+</div>
+
+<div class="profile-tabs" style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+    <button class="p-tab active" onclick="openSection('edit-profile')">Profile Info</button>
+    <button class="p-tab" onclick="openSection('order-history')">Orders</button>
+    <button class="p-tab" onclick="openSection('wishlist')">Wishlist</button>
+    <button class="p-tab" onclick="openSection('security')">Security</button>
+</div>
+
+<div id="edit-profile" class="profile-section">
+    </div>
+
+<div id="order-history" class="tab-content" style="display: none;">
+    <h3 style="color: #d4af37; margin-top: 20px;">Your Orders</h3>
+    <div id="orderListContainer">
+        <p style="color: #ccc;">Loading orders...</p>
+    </div>
+</div>
+
+<div id="wishlist" class="profile-section">
+    <h3 style="color:#d4af37;">Favorite Items</h3>
+    <div id="wishlist-items" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:15px; margin-top:20px;"></div>
+</div>
+</div>
+
+<div id="security" class="profile-section" style="display:none; padding-top: 20px;">
+    <h3 style="color:#d4af37; margin-bottom: 15px;">Change Password</h3>
+    
+    <div class="form-group" style="position: relative;">
+        <label>Current Password</label>
+        <input type="password" id="currPass" style="padding-right: 40px;">
+        <i class="fas fa-eye" id="toggleCurrPass" style="position: absolute; right: 15px; top: 42px; color: #888; cursor: pointer;"></i>
+    </div>
+
+    <div class="form-group" style="position: relative;">
+        <label>New Password</label>
+        <input type="password" id="newPass" style="padding-right: 40px;">
+        <i class="fas fa-eye" id="toggleNewPass" style="position: absolute; right: 15px; top: 42px; color: #888; cursor: pointer;"></i>
+    </div>
+    
+    <button class="update-pw-btn" onclick="handleUpdatePassword()">Update Password</button>
+</div>
+
+<div id="address-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:10001; justify-content:center; align-items:center; padding: 20px;">
+    <div style="background:#111; padding:25px; border:1px solid #d4af37; border-radius:20px; width:100%; max-width:400px; position:relative;">
+        <span onclick="window.closeAddressModal()" style="position:absolute; top:15px; right:20px; color:#fff; cursor:pointer; font-size:24px;">&times;</span>
+        <h3 style="color:#d4af37; text-align:center; margin-bottom:20px;">ADD NEW ADDRESS</h3>
+        
+        <div class="form-group">
+            <input type="text" id="new-addr-name" placeholder="Receiver's Name" style="width:100%; padding:12px; background:#1a1a1a; border:1px solid #333; color:white; border-radius:8px; margin-bottom:15px;">
+            <input type="text" id="new-addr-phone" placeholder="Phone Number" style="width:100%; padding:12px; background:#1a1a1a; border:1px solid #333; color:white; border-radius:8px; margin-bottom:15px;">
+            <textarea id="new-addr-full" placeholder="Full Address (House, Road, Area...)" style="width:100%; padding:12px; background:#1a1a1a; border:1px solid #333; color:white; border-radius:8px; height:80px; margin-bottom:15px;"></textarea>
+            <input type="email" id="new-addr-email" placeholder="Email Address (Optional)" style="width:100%; padding:12px; background:#1a1a1a; border:1px solid #333; color:white; border-radius:8px; margin-bottom:15px;">
+        </div>
+
+        <button onclick="window.saveAddressToBook()" class="save-btn">SAVE TO BOOK</button>
+    </div>
+</div>
+
+<div id="custom-notification">
+    <div class="noti-icon"><i class="fas fa-bell"></i></div>
+    <div id="noti-message" style="font-size: 14px; font-weight: 500;"></div>
+</div>
+
+<script>
+    async function syncDataNow() {
+        const userId = localStorage.getItem('userId');
+        if (userId && window.db) {
+            const userRef = window.ref(window.db, 'users/' + userId);
+            const snapshot = await window.get(userRef);
+            
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                // সরাসরি HTML ইনপুট বক্সে ডাটা বসানো
+                document.getElementById('editName').value = data.name || "Phone User";
+                document.getElementById('editContact').value = data.phone || "";
+                document.getElementById('editEmail').value = data.email || "";
+                document.getElementById('editReligion').value = data.religion || "Islam";
+                document.getElementById('editCountry').value = data.country || "Bangladesh";
+                document.getElementById('editAddress').value = data.address || "";
+                document.getElementById('displayPic').src = data.profilePic || "https://via.placeholder.com/120";
+                
+                // লোকাল স্টোরেজও ঠিক করে দেওয়া
+                localStorage.setItem('currentUser', JSON.stringify(data));
+                console.log("Profile Synced from Firebase!");
+            }
+        }
+    }
+
+    // পেজ লোড হওয়ার ৩ সেকেন্ড পর এটি কাজ করবে
+    window.onload = () => {
+        setTimeout(syncDataNow, 3000);
+    };
+</script>
+
+<script type="module" src="script.js"></script>
+<script src="profile-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOMUNEXUS | Luxury Global Network</title>
+    <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Poppins', sans-serif; }
+        #globeViz { width: 100vw; height: 100vh; border: none; box-sizing: border-box; }
+
+        #shop-panel {
+            position: absolute; top: 50%; right: 25px; transform: translateY(-50%);
+            width: 380px; background: rgba(10, 10, 10, 0.98); border: 2px solid #D4AF37;
+            border-radius: 20px; display: none; z-index: 2000; overflow: hidden;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.4); animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn { from { right: -500px; } to { right: 25px; } }
+        @media (max-width: 768px) { #shop-panel { top: auto; bottom: 20px; right: 10px; left: 10px; width: auto; transform: none; } }
+
+        .outer-swiper { width: 100%; height: auto; }
+        .inner-swiper { width: 100%; height: 230px; position: relative; border-bottom: 2px solid #D4AF37; }
+        .inner-swiper img { width: 100%; height: 100%; object-fit: cover; }
+
+        .card-content { padding: 25px; color: white; }
+        .card-content h3 { font-family: 'Cinzel', serif; color: #D4AF37; margin: 0 0 10px 0; font-size: 18px; }
+        .info-tag { background: #D4AF37; color: #000; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; margin-top: 10px; display: inline-block; }
+        
+        .map-btn {
+            display: block; width: 100%; padding: 12px; background: transparent; border: 1px solid #D4AF37;
+            color: #D4AF37; text-align: center; text-decoration: none; border-radius: 8px; font-size: 12px;
+            font-weight: bold; margin-top: 15px; transition: 0.3s;
+        }
+        .map-btn:hover { background: #D4AF37; color: #000; }
+
+        .close-btn { position: absolute; top: 15px; left: 15px; color: #000; cursor: pointer; background: #D4AF37; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2500; }
+        
+        .swiper-button-next, .swiper-button-prev { color: #D4AF37 !important; scale: 0.5; background: rgba(0,0,0,0.5); padding: 30px; border-radius: 50%; }
+
+        /* ব্র্যান্ড হেডার ডিজাইন */
+    .brand-header {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 3000;
+        pointer-events: none; /* যাতে ম্যাপ ঘোরানোতে সমস্যা না হয় */
+    }
+
+    .brand-header h1 {
+        font-family: 'Cinzel', serif;
+        color: #D4AF37;
+        font-size: 32px;
+        letter-spacing: 8px;
+        margin: 0;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    }
+
+    .brand-header p {
+        font-family: 'Poppins', sans-serif;
+        color: #fff;
+        font-size: 12px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-top: 5px;
+        opacity: 0.8;
+    }
+
+    /* মোবাইল ডিভাইসের জন্য সাইজ অ্যাডজাস্টমেন্ট */
+    @media (max-width: 768px) {
+        .brand-header h1 { font-size: 20px; letter-spacing: 4px; }
+        .brand-header p { font-size: 8px; }
+    }
+    #music-control:hover {
+    background: rgba(212, 175, 55, 0.3) !important;
+    transform: scale(1.1);
+    transition: 0.3s;
+    }
+    </style>
+</head>
+<body>
+
+<div class="brand-header">
+    <h1>SOMUNEXUS</h1>
+    <p>Global Luxury Network</p>
+</div>
+<audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+<audio id="clickSound">
+    <source src="https://actions.google.com/sounds/v1/foley/sliding_door_open.ogg" type="audio/ogg">
+</audio>
+<button id="music-control" onclick="toggleMusic()" style="position: absolute; top: 25px; right: 25px; z-index: 4000; background: rgba(212, 175, 55, 0.1); border: 1px solid #D4AF37; color: #D4AF37; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+    <span id="music-icon">🔊</span>
+</button>
+
+    <div id="globeViz"></div>
+
+    <div id="shop-panel">
+        <span class="close-btn" onclick="document.getElementById('shop-panel').style.display='none'">×</span>
+        <div class="swiper outer-swiper">
+            <div class="swiper-wrapper" id="main-wrapper"></div>
+            <div class="swiper-button-next main-next"></div>
+            <div class="swiper-button-prev main-prev"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="//unpkg.com/globe.gl"></script>
+
+    <script>
+        // ২০টি গ্লোবাল লোকেশন
+        const shopLocations = [
+            { country: "BANGLADESH", name: "Dhaka HQ", lat: 23.8103, lng: 90.4125, isHQ: true, images: ["https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=600", "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600"], addr: "Banani 11, Dhaka", tel: "+880 171X", tz: "Asia/Dhaka", gMap: "https://maps.app.goo.gl/1" },
+            { country: "BANGLADESH", name: "CTG Showroom", lat: 22.3569, lng: 91.7832, images: ["https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=600"], addr: "GEC, Chittagong", tel: "+880 181X", tz: "Asia/Dhaka", gMap: "https://maps.app.goo.gl/2" },
+            { country: "USA", name: "NYC Manhattan", lat: 40.7128, lng: -74.0060, images: ["https://images.unsplash.com/photo-1541339907198-e087566f1c0b?w=600"], addr: "5th Ave, New York", tel: "+1 212", tz: "America/New_York", gMap: "https://maps.app.goo.gl/3" },
+            { country: "USA", name: "LA Luxury Store", lat: 34.0522, lng: -118.2437, images: ["https://images.unsplash.com/photo-1441984904996-e0b6ba687e12?w=600"], addr: "Beverly Hills, LA", tel: "+1 310", tz: "America/Los_Angeles", gMap: "https://maps.app.goo.gl/4" },
+            { country: "UAE", name: "Dubai Mall", lat: 25.2048, lng: 55.2708, images: ["https://images.unsplash.com/photo-1582037928769-181f2644ecb7?w=600"], addr: "Downtown Dubai", tel: "+971 4", tz: "Asia/Dubai", gMap: "https://maps.app.goo.gl/5" },
+            { country: "UK", name: "London Store", lat: 51.5074, lng: -0.1278, images: ["https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600"], addr: "Oxford St, London", tel: "+44 20", tz: "Europe/London", gMap: "https://maps.app.goo.gl/6" },
+            { country: "JAPAN", name: "Tokyo Ginza", lat: 35.6762, lng: 139.6503, images: ["https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600"], addr: "Ginza, Tokyo", tel: "+81 3", tz: "Asia/Tokyo", gMap: "https://maps.app.goo.gl/7" },
+            { country: "FRANCE", name: "Paris Boutique", lat: 48.8566, lng: 2.3522, images: ["https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600"], addr: "Paris Central", tel: "+33 1", tz: "Europe/Paris", gMap: "https://maps.app.goo.gl/8" },
+            { country: "CANADA", name: "Toronto Hub", lat: 43.6532, lng: -79.3832, images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600"], addr: "Downtown Toronto", tel: "+1 416", tz: "America/Toronto", gMap: "https://maps.app.goo.gl/9" },
+            { country: "AUSTRALIA", name: "Sydney Store", lat: -33.8688, lng: 151.2093, images: ["https://images.unsplash.com/photo-1494145904049-0dca59b4bbad?w=600"], addr: "George St, Sydney", tel: "+61 2", tz: "Australia/Sydney", gMap: "https://maps.app.goo.gl/10" },
+            { country: "INDIA", name: "Delhi Luxury", lat: 28.6139, lng: 77.2090, images: ["https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600"], addr: "CP, New Delhi", tel: "+91 11", tz: "Asia/Kolkata", gMap: "https://maps.app.goo.gl/11" },
+            { country: "SINGAPORE", name: "Orchard Store", lat: 1.3521, lng: 103.8198, images: ["https://images.unsplash.com/photo-1525648199074-cee30ba79a4a?w=600"], addr: "Orchard Rd", tel: "+65 6", tz: "Asia/Singapore", gMap: "https://maps.app.goo.gl/12" },
+            { country: "GERMANY", name: "Berlin Gallery", lat: 52.5200, lng: 13.4050, images: ["https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600"], addr: "Berlin City", tel: "+49 30", tz: "Europe/Berlin", gMap: "https://maps.app.goo.gl/13" },
+            { country: "ITALY", name: "Milan Fashion", lat: 45.4642, lng: 9.1900, images: ["https://images.unsplash.com/photo-1514890547357-a9ee2887ad8e?w=600"], addr: "Milan Plaza", tel: "+39 02", tz: "Europe/Rome", gMap: "https://maps.app.goo.gl/14" },
+            { country: "SAUDI ARABIA", name: "Riyadh Center", lat: 24.7136, lng: 46.6753, images: ["https://images.unsplash.com/photo-1586724230538-46bc30f9a202?w=600"], addr: "Riyadh Tower", tel: "+966 11", tz: "Asia/Riyadh", gMap: "https://maps.app.goo.gl/15" },
+            { country: "MALAYSIA", name: "KL Boutique", lat: 3.1390, lng: 101.6869, images: ["https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=600"], addr: "Bukit Bintang", tel: "+60 3", tz: "Asia/Kuala_Lumpur", gMap: "https://maps.app.goo.gl/16" },
+            { country: "BRAZIL", name: "São Paulo Store", lat: -23.5505, lng: -46.6333, images: ["https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600"], addr: "Paulista Ave", tel: "+55 11", tz: "America/Sao_Paulo", gMap: "https://maps.app.goo.gl/17" },
+            { country: "RUSSIA", name: "Moscow Elite", lat: 55.7558, lng: 37.6173, images: ["https://images.unsplash.com/photo-1513326738677-b964603b136d?w=600"], addr: "Red Square", tel: "+7 495", tz: "Europe/Moscow", gMap: "https://maps.app.goo.gl/18" },
+            { country: "QATAR", name: "Doha Luxury", lat: 25.2854, lng: 51.5310, images: ["https://images.unsplash.com/photo-1582037928769-181f2644ecb7?w=600"], addr: "Doha Pearl", tel: "+974 4", tz: "Asia/Qatar", gMap: "https://maps.app.goo.gl/19" },
+            { country: "SWITZERLAND", name: "Zurich Hub", lat: 47.3769, lng: 8.5417, images: ["https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600"], addr: "Zurich City", tel: "+41 44", tz: "Europe/Zurich", gMap: "https://maps.app.goo.gl/20" }
+        ];
+
+            const world = Globe()(document.getElementById('globeViz'))
+            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+            .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+            .pointsData(shopLocations)
+            .pointColor(d => d.isHQ ? '#D4AF37' : '#ffffff')
+            .pointAltitude(d => d.isHQ ? 0.02 : 0.01) 
+            .pointRadius(d => d.isHQ ? 0.6 : 0.4)
+            .labelsData(shopLocations)
+            .labelText('country')
+            .labelColor(() => '#D4AF37').labelSize(1.4)
+            .onPointClick(d => openShopPanel(d.country, d.lat, d.lng))
+            .arcsData(shopLocations.filter(d => !d.isHQ).map(d => ({
+                startLat: 23.8103, startLng: 90.4125, endLat: d.lat, endLng: d.lng, color: ['#D4AF37', 'white']
+            })))
+            .arcDashLength(0.5).arcDashGap(2).arcDashAnimateTime(1500).arcStroke(0.4)
+            .ringsData(shopLocations).ringColor(() => '#D4AF37').ringMaxRadius(d => d.isHQ ? 6 : 3);
+
+        function openShopPanel(countryName, lat, lng) {
+            document.getElementById('clickSound').play(); // ক্লিক সাউন্ড বাজবে
+            const countryShops = shopLocations.filter(s => s.country === countryName);
+            const mainWrapper = document.getElementById('main-wrapper');
+            mainWrapper.innerHTML = "";
+
+            countryShops.forEach(shop => {
+                const imgSlides = shop.images.map(img => `<div class="swiper-slide"><img src="${img}"></div>`).join('');
+                const now = new Date();
+                const timeStr = new Intl.DateTimeFormat('en-US', { timeStyle: 'short', timeZone: shop.tz }).format(now);
+                const dateStr = new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeZone: shop.tz }).format(now);
+
+                mainWrapper.innerHTML += `
+                    <div class="swiper-slide">
+                        <div class="swiper inner-swiper">
+                            <div class="swiper-wrapper">${imgSlides}</div>
+                            <div class="swiper-button-next"></div><div class="swiper-button-prev"></div>
+                        </div>
+                        <div class="card-content">
+                            <h3>${shop.name}</h3>
+                            <p style="font-size:13px; color:#ccc; margin:5px 0;">${shop.addr}</p>
+                            <p style="font-size:12px;"><b>Contact:</b> ${shop.tel}</p>
+                            <p style="font-size:11px; color:#D4AF37; margin:10px 0 0 0;">${dateStr}</p>
+                            <div class="info-tag">Local Time: ${timeStr}</div>
+                            <a href="${shop.gMap}" target="_blank" class="map-btn">VIEW ON GOOGLE MAPS</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('shop-panel').style.display = 'block';
+            new Swiper(".outer-swiper", { navigation: { nextEl: ".main-next", prevEl: ".main-prev" } });
+            new Swiper(".inner-swiper", { navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }, nested: true });
+            world.pointOfView({ lat: lat, lng: lng, altitude: 0.7 }, 1000);
+            // ২. ম্যাপে প্রথমবার ক্লিক করলে মিউজিক শুরু 
+                window.addEventListener('click', () => {
+                const music = document.getElementById('bgMusic');
+                if (music.paused) {
+                music.volume = 0.2; // ভলিউম ২০% রাখা হলো যাতে বিরক্তিকর না লাগে
+                music.play();
+                }
+                }, { once: true }); // এটি শুধু একবারই কাজ করবে
+        }
+
+        world.controls().autoRotate = true;
+        world.controls().autoRotateSpeed = 0.1;
+
+        function toggleMusic() {
+    const music = document.getElementById('bgMusic'); // আপনার অডিও আইডির সাথে মিল থাকতে হবে
+    const icon = document.getElementById('music-icon');
+
+    if (music.paused) {
+        music.play();
+        icon.innerText = "🔊";
+    } else {
+        music.pause();
+        icon.innerText = "🔈";
+    }
+    
+    }
+    </script>
+</body>
+</html>

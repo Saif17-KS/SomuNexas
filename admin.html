@@ -116,20 +116,25 @@
     window.auth = auth;
     window.db = db;
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // ইমেইলটি ছোট হাতের অক্ষরে চেক করা নিরাপদ
-            if (user.email.toLowerCase() !== "mdsaifhasan724317@gmail.com") {
-                alert("আপনার এই পেজে প্রবেশের অনুমতি নেই!");
-                window.location.href = "index.html"; 
-            }
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // ইমেইলটি ছোট হাতের অক্ষরে কনভার্ট করে চেক করা হচ্ছে (নিরাপদ উপায়)
+        const adminEmail = "mdsaifhasan724317@gmail.com";
+        if (user.email.toLowerCase() !== adminEmail.toLowerCase()) {
+            alert("আপনার এই প্যানেলে প্রবেশের অনুমতি নেই!");
+            document.body.innerHTML = "<h1>Access Denied</h1>"; // পেজের সব কন্টেন্ট মুছে দেবে
+            window.location.href = "index.html";
         } else {
-            window.location.href = "login.html";
+            console.log("Welcome Admin!");
         }
-    });
+    } else {
+        window.location.href = "login.html";
+    }
+});
 </script>
     <script type="module" src="script.js"></script>
 </body>
 
 </html>
+
 

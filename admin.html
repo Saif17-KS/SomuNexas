@@ -123,27 +123,30 @@
     window.db = db;
 
 onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // তোমার সঠিক এডমিন ইমেইল (অবশ্যই ছোট হাতের অক্ষরে লিখবে এখানে)
-        const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase();
-        
-        // লগইন করা ইউজারের ইমেইল
-        const currentUserEmail = user.email.toLowerCase();
+    const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase();
 
-        console.log("Logged in as:", currentUserEmail); // এটি চেক করার জন্য
+    if (user) {
+        const currentUserEmail = user.email.toLowerCase();
+        console.log("Logged in as:", currentUserEmail);
 
         if (currentUserEmail === adminEmail) {
-            console.log("Welcome Admin! Access Granted.");
-            // এখানে চাইলে লোডিং ইনডিকেটর বন্ধ করতে পারো
+            console.log("Access Granted: Welcome Admin!");
+            // এখানে তোমার এডমিন প্যানেল দেখানোর কাজ শুরু হবে
+            // ডাটা লোড হতে শুরু করবে কারণ db এবং auth এখন রেডি
         } else {
-            console.error("Access Denied for:", currentUserEmail);
-            alert("আপনার এই প্যানেলে প্রবেশের অনুমতি নেই! আপনার ইমেইল: " + currentUserEmail);
+            console.warn("Access Denied for:", currentUserEmail);
+            alert("আপনার এই ইমেইলটি (" + currentUserEmail + ") এডমিন হিসেবে নিবন্ধিত নয়!");
             window.location.href = "index.html";
         }
     } else {
-        // যদি লগইন করা না থাকে
-        console.log("No user logged in. Redirecting to login...");
-        window.location.href = "login.html";
+        // ফায়ারবেস অনেক সময় ইউজার পেতে ১-২ সেকেন্ড সময় নেয়
+        // তাই সরাসরি রিডাইরেক্ট না করে ১ সেকেন্ড অপেক্ষা করে চেক করা ভালো
+        setTimeout(() => {
+            if (!auth.currentUser) {
+                console.log("No user found after timeout. Redirecting...");
+                window.location.href = "login.html";
+            }
+        }, 1500); 
     }
 });
 </script>
@@ -153,3 +156,4 @@ onAuthStateChanged(auth, (user) => {
 </body>
 
 </html>
+

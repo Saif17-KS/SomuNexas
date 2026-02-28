@@ -29,21 +29,6 @@ window.set = set;
 window.update = update;
 window.onValue = onValue;
 
-/// মালিকের সিকিউরিটি চেক (অ্যাডমিন ছাড়া কেউ ঢুকতে পারবে না) ///
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // তোমার সঠিক ইমেইলটি চেক করা হচ্ছে
-        if (user.email !== "mdsaifhasan724317@gmail.com") {
-            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
-            window.location.href = "index.html"; 
-        }
-    } else {
-        // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
-        window.location.href = "login.html";
-    }
-});
-/// End ///
-
 
 // এই কোডটি তোমার ফাইলের একদম শেষে অথবা Firebase initialization এর পরে বসাও
 const productsRefForUI = ref(db, 'products');
@@ -2360,6 +2345,7 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
+
 
 
 

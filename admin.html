@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="icon/KS.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .admin-body { background: #050505; padding: 50px; }
         .admin-container { max-width: 800px; margin: auto; background: #111; padding: 40px; border-radius: 20px; border: 1px solid #d4af37; }
@@ -115,6 +116,7 @@
     // ফায়ারবেস অ্যাপ শুরু করা
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
     const auth = getAuth(app);
+    window.auth = auth; // এটি script.js কে auth ব্যবহার করতে সাহায্য করবে
 
     // সিকিউরিটি চেক
     onAuthStateChanged(auth, (user) => {
@@ -132,4 +134,5 @@
 </script>
     <script type="module" src="script.js"></script>
 </body>
+
 </html>

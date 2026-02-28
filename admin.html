@@ -97,7 +97,39 @@
 
     <hr style="border: 0.5px solid #333; margin: 40px 0;">
     <div id="admin-product-list" class="admin-container" style="margin-top: 20px;"></div>
+    
+<script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+    const firebaseConfig = {
+        apiKey: "AIzaSyDNv18tFenJP9XpyL7cr9BaA3vg-gLUC3U",
+        authDomain: "somunexas.firebaseapp.com",
+        projectId: "somunexas",
+        databaseURL: "https://somunexas-default-rtdb.firebaseio.com",
+        storageBucket: "somunexas.firebasestorage.app",
+        messagingSenderId: "880413975961",
+        appId: "1:880413975961:web:838932e24b0644473b1f08"
+    };
+
+    // ফায়ারবেস অ্যাপ শুরু করা
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+    const auth = getAuth(app);
+
+    // সিকিউরিটি চেক
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // তোমার সঠিক ইমেইলটি চেক করা হচ্ছে
+            if (user.email !== "mdsaifhasan724317@gmail.com") {
+                alert("আপনি এই পেজ দেখার অনুমতি নেই!");
+                window.location.href = "index.html"; 
+            }
+        } else {
+            // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
+            window.location.href = "login.html";
+        }
+    });
+</script>
     <script type="module" src="script.js"></script>
 </body>
 </html>

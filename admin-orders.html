@@ -48,6 +48,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDNv18tFenJP9XpyL7cr9BaA3vg-gLUC3U",
@@ -59,24 +60,26 @@
         appId: "1:880413975961:web:838932e24b0644473b1f08"
     };
 
+    // Firebase ইনিশিয়ালাইজ করা
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app); // Auth সার্ভিস চালু করা হলো
     const ordersRef = ref(db, 'orders');
 
-///owner use site code no use customer////
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        // এখানে তোমার নিজের ইমেইলটি বসাও
-        if (user.email !== "mdsaifhasan7243@gmail.com") {
-            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
-            window.location.href = "index.html"; // সাধারণ কাস্টমার হলে বের করে দেবে
+    /// মালিকের সিকিউরিটি চেক (v10 মডুলার স্টাইল) ///
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // তোমার সঠিক ইমেইলটি এখানে দাও (১৭ সহ বা ছাড়া তোমার আসল ইমেইল অনুযায়ী)
+            if (user.email !== "mdsaifhasan724317@gmail.com") {
+                alert("আপনি এই পেজ দেখার অনুমতি নেই!");
+                window.location.href = "index.html"; 
+            }
+        } else {
+            // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
+            window.location.href = "login.html";
         }
-    } else {
-        // যদি কেউ লগইন না করেই ঢোকে
-        window.location.href = "login.html";
-    }
-});
-///End////
+    });
+    /// End ///
 
     // ডাটাবেজ থেকে অর্ডার আনা
     onValue(ordersRef, (snapshot) => {

@@ -1,8 +1,7 @@
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getDatabase, ref, push, set, onValue, update, remove, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-// কনফিগ
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+// কনফিগ আগেরটাই থাকবে
 const firebaseConfig = {
     apiKey: "AIzaSyDNv18tFenJP9XpyL7cr9BaA3vg-gLUC3U",
     authDomain: "somunexas.firebaseapp.com",
@@ -12,12 +11,10 @@ const firebaseConfig = {
     messagingSenderId: "880413975961",
     appId: "1:880413975961:web:838932e24b0644473b1f08"
 };
-
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const db = getDatabase(app);
-const auth = getAuth(app); 
-
-// গ্লোবাল উইন্ডোতে এক্সপোর্ট
+const auth = getAuth(app); // এটিই আসল যা মিস হচ্ছিল
+// সবগুলোকে গ্লোবাল উইন্ডোতে এক্সপোর্ট করা
 window.auth = auth;
 window.EmailAuthProvider = EmailAuthProvider;
 window.reauthenticateWithCredential = reauthenticateWithCredential;
@@ -2345,7 +2342,3 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
-
-
-
-

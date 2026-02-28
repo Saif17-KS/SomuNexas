@@ -60,9 +60,9 @@
 </div>
 
 <script type="module">
- // Firebase মডিউল ইম্পোর্ট করুন
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"; // এটি যোগ করা হয়েছে
 
 // আপনার Firebase কনফিগারেশন
 const firebaseConfig = {
@@ -77,26 +77,27 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app); // Auth সার্ভিস চালু করা হলো
+
+/// মালিকের সিকিউরিটি চেক (v9/v10 স্টাইল) ///
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // তোমার সঠিক ইমেইলটি চেক করা হচ্ছে (১৭ সহ বা ছাড়া তোমার আসল ইমেইল অনুযায়ী)
+        if (user.email !== "mdsaifhasan724317@gmail.com") {
+            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
+            window.location.href = "index.html"; 
+        }
+    } else {
+        // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
+        window.location.href = "login.html";
+    }
+});
+/// End ///
 
 document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('customerTableBody');
     const uCount = document.getElementById('uCount');
     const oCount = document.getElementById('oCount');
-
-///owner use site code no use customer////
-firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        // এখানে তোমার নিজের ইমেইলটি বসাও
-        if (user.email !== "mdsaifhasan7243@gmail.com") {
-            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
-            window.location.href = "index.html"; // সাধারণ কাস্টমার হলে বের করে দেবে
-        }
-    } else {
-        // যদি কেউ লগইন না করেই ঢোকে
-        window.location.href = "login.html";
-    }
-});
-///End////
 
     // Firebase থেকে ইউজার ডাটা পড়া
     onValue(ref(db, 'users'), (snapshot) => {

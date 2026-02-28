@@ -1,6 +1,7 @@
 // Firebase SDK গুলো ইম্পোর্ট করা হচ্ছে
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getDatabase, ref, onValue, push, set, update, get } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
 
 // তোমার প্রোভাইড করা Firebase কনফিগ
 const firebaseConfig = {
@@ -17,9 +18,9 @@ const firebaseConfig = {
 // Firebase ইনিশিয়ালাইজ করা
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app); // Auth ইনিশিয়ালাইজ করা হলো
 
-// এই লাইনগুলো যোগ করো (সবচেয়ে গুরুত্বপূর্ণ)
-// এগুলো না থাকলে loadUserMessages এর ভেতরের ref/onValue কাজ করবে না
+// গ্লোবাল উইন্ডোতে এক্সপোর্ট করা
 window.db = db;
 window.ref = ref;
 window.onValue = onValue;
@@ -30,20 +31,20 @@ window.get = get;
 
 let activeUserId = null;
 
-///owner use site code no use customer////
-firebase.auth().onAuthStateChanged((user) => {
+/// মালিকের সিকিউরিটি চেক (অ্যাডমিন ছাড়া কেউ চ্যাট দেখতে পারবে না) ///
+onAuthStateChanged(auth, (user) => {
     if (user) {
-        // এখানে তোমার নিজের ইমেইলটি বসাও
-        if (user.email !== "mdsaifhasan7243@gmail.com") {
+        // তোমার ইমেইলটি চেক করা হচ্ছে (১৭ ছাড়া বা সহ, তোমার আসল ইমেইল অনুযায়ী দাও)
+        if (user.email !== "mdsaifhasan724317@gmail.com") {
             alert("আপনি এই পেজ দেখার অনুমতি নেই!");
-            window.location.href = "index.html"; // সাধারণ কাস্টমার হলে বের করে দেবে
+            window.location.href = "index.html"; 
         }
     } else {
-        // যদি কেউ লগইন না করেই ঢোকে
+        // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
         window.location.href = "login.html";
     }
 });
-///End////
+/// End ///
     // ৩. বাম পাশের লিস্টে ইউজারদের চ্যাট লোড করা
     const userListDiv = document.getElementById('user-list');
 

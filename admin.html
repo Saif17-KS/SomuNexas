@@ -122,20 +122,34 @@
     window.auth = auth;
     window.db = db;
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            const adminEmail = "mdsaifhasan724317@gmail.com";
-            if (user.email.toLowerCase() !== adminEmail.toLowerCase()) {
-                alert("Access Denied!");
-                window.location.href = "index.html";
-            }
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // তোমার সঠিক এডমিন ইমেইল (অবশ্যই ছোট হাতের অক্ষরে লিখবে এখানে)
+        const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase();
+        
+        // লগইন করা ইউজারের ইমেইল
+        const currentUserEmail = user.email.toLowerCase();
+
+        console.log("Logged in as:", currentUserEmail); // এটি চেক করার জন্য
+
+        if (currentUserEmail === adminEmail) {
+            console.log("Welcome Admin! Access Granted.");
+            // এখানে চাইলে লোডিং ইনডিকেটর বন্ধ করতে পারো
         } else {
-            window.location.href = "login.html";
+            console.error("Access Denied for:", currentUserEmail);
+            alert("আপনার এই প্যানেলে প্রবেশের অনুমতি নেই! আপনার ইমেইল: " + currentUserEmail);
+            window.location.href = "index.html";
         }
-    });
+    } else {
+        // যদি লগইন করা না থাকে
+        console.log("No user logged in. Redirecting to login...");
+        window.location.href = "login.html";
+    }
+});
 </script>
 
 <script type="module" src="script.js"></script>
 
 </body>
+
 </html>

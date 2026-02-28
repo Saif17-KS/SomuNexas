@@ -28,6 +28,7 @@ window.update = update;
 window.onValue = onValue;
 window.remove = remove;
 window.get = get;
+
 console.log("Firebase initialized and exports ready!");
 
 // এই কোডটি তোমার ফাইলের একদম শেষে অথবা Firebase initialization এর পরে বসাও
@@ -280,16 +281,17 @@ window.publishProduct = async function() {
     const insideDhaka = document.getElementById('p-inside-dhaka').value || 60;
     const outsideDhaka = document.getElementById('p-outside-dhaka').value || 120;
 
-    // ১. ভ্যালিডেশন (আগের মতোই)
+    // ১. ভ্যালিডেশন
     if (!name || !currentPrice || category === 'all') {
         alert("দয়া করে নাম, দাম, স্টক এবং ক্যাটাগরি সিলেক্ট করুন!");
         return;
     }
 
-    // এডিট মোড হলে পুরনো ডাটা খুঁজে বের করা (যাতে ইমেজ বা স্টক না হারায়)
-    const productToUpdate = (window.products || products).find(p => p.id == editId);
+    // ডাটা সোর্স চেক (Safe access)
+    const allProducts = window.products || [];
+    const productToUpdate = allProducts.find(p => p.id == editId);
 
-    // ২. মেইন ইমেজ প্রসেসিং (নতুন না দিলে পুরনোটা থাকবে)
+    // ২. মেইন ইমেজ প্রসেসিং
     let mediaArray = [];
     if (mediaFiles.length > 0) {
         for (let file of mediaFiles) {
@@ -311,7 +313,7 @@ window.publishProduct = async function() {
         descMediaArray = productToUpdate.descriptionImages || [];
     }
 
-    // ৪. ডাটাবেজ অবজেক্ট (আপনার অরিজিনাল স্ট্রাকচার অক্ষুণ্ণ রাখা হয়েছে)
+    // ৪. ডাটাবেজ অবজেক্ট (তোমার অরিজিনাল স্ট্রাকচার)
     const productData = {
         id: editId ? Number(editId) : Date.now(),
         name: name,
@@ -331,14 +333,14 @@ window.publishProduct = async function() {
         stock: (stock !== "" && stock !== null) ? parseInt(stock) : 0 
     };
 
+    // Firebase Functions ব্যবহার করার সময় window.db এবং window.ref ব্যবহার করা হয়েছে
     if (editId) {
-        // ৫. এডিট মোড: Firebase আপডেট (এখানে update ব্যবহার করা হয়েছে যাতে ডাটা না হারায়)
+        // ৫. এডিট মোড: Firebase আপডেট
         if (productToUpdate && productToUpdate.fbKey) {
-            const productRef = ref(db, 'products/' + productToUpdate.fbKey);
-            update(productRef, productData)
+            const productRef = window.ref(window.db, 'products/' + productToUpdate.fbKey);
+            window.update(productRef, productData)
                 .then(() => {
                     alert("Product Updated Successfully!");
-                    // ফর্ম রিসেট করা
                     document.getElementById('editProductId').value = '';
                     document.getElementById('productForm').reset();
                     document.querySelector('.publish-btn').innerText = "PUBLISH PRODUCT";
@@ -348,8 +350,9 @@ window.publishProduct = async function() {
             alert("Error: Product Key Not Found!");
         }
     } else {
-        // ৬. নতুন প্রোডাক্ট পাবলিশ (আপনার অরিজিনাল লজিক)
-        push(ref(db, 'products'), productData)
+        // ৬. নতুন প্রোডাক্ট পাবলিশ
+        const productsListRef = window.ref(window.db, 'products');
+        window.push(productsListRef, productData)
             .then(() => {
                 alert("সাফল্যের সাথে Firebase-এ পাবলিশ হয়েছে!");
                 document.getElementById('productForm').reset();
@@ -2345,5 +2348,3 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
-
-

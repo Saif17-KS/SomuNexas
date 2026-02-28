@@ -28,7 +28,7 @@ window.update = update;
 window.onValue = onValue;
 window.remove = remove;
 window.get = get;
-
+console.log("Firebase initialized and exports ready!");
 
 // এই কোডটি তোমার ফাইলের একদম শেষে অথবা Firebase initialization এর পরে বসাও
 const productsRefForUI = ref(db, 'products');
@@ -2345,4 +2345,5 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
+
 

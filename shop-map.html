@@ -110,7 +110,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="//unpkg.com/globe.gl"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
 
     <script>
         // ২০টি গ্লোবাল লোকেশন
@@ -138,8 +138,8 @@
         ];
 
             const world = Globe()(document.getElementById('globeViz'))
-            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
-            .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+            .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
+            .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
             .pointsData(shopLocations)
             .pointColor(d => d.isHQ ? '#D4AF37' : '#ffffff')
             .pointAltitude(d => d.isHQ ? 0.02 : 0.01) 

@@ -7,11 +7,13 @@
     <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-<script>
+    <script>
     (function() {
+        // ১. লোকাল স্টোরেজ থেকে ইউজার ডাটা নাও
         const userData = localStorage.getItem('currentUser');
         const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
 
+        // ২. যদি ডাটা একদমই না থাকে (কেউ লগইন করেনি)
         if (!userData) {
             alert("প্রবেশ নিষেধ! আগে লগইন করুন।");
             window.location.href = "login.html";
@@ -21,11 +23,15 @@
         const user = JSON.parse(userData);
         const userEmail = user.email ? user.email.toLowerCase().trim() : "";
 
+        // ৩. যদি লগইন করা থাকে কিন্তু ইমেইল তোমার অ্যাডমিন ইমেইল না হয়
         if (userEmail !== adminEmail) {
-            alert("আপনি এই চ্যাট প্যানেল দেখার অনুমতি রাখেন না!");
-            window.location.href = "index.html";
+            alert("আপনি এই শপ-এর অ্যাডমিন নন! আপনার অ্যাক্সেস ডিনাইড।");
+            window.location.href = "index.html"; 
             return;
         }
+
+        // সব ঠিক থাকলে কনসোলে দেখাবে
+        console.log("Welcome, Admin Saif!");
     })();
 </script>
     <style>
@@ -385,3 +391,4 @@
 </body>
 
 </html>
+

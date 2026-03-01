@@ -32,18 +32,24 @@ window.get = get;
 let activeUserId = null;
 
 /// মালিকের সিকিউরিটি চেক (অ্যাডমিন ছাড়া কেউ চ্যাট দেখতে পারবে না) ///
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // তোমার ইমেইলটি চেক করা হচ্ছে (১৭ ছাড়া বা সহ, তোমার আসল ইমেইল অনুযায়ী দাও)
-        if (user.email !== "mdsaifhasan724317@gmail.com") {
-            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
-            window.location.href = "index.html"; 
-        }
-    } else {
-        // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
+(function() {
+    const userData = localStorage.getItem('currentUser');
+    const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
+
+    if (!userData) {
         window.location.href = "login.html";
+        return;
     }
-});
+
+    const user = JSON.parse(userData);
+    const userEmail = user.email ? user.email.toLowerCase().trim() : "";
+
+    if (userEmail !== adminEmail) {
+        alert("প্রবেশ নিষেধ! আপনি এই শপের অ্যাডমিন নন।");
+        window.location.href = "index.html";
+        return;
+    }
+})();
 /// End ///
     // ৩. বাম পাশের লিস্টে ইউজারদের চ্যাট লোড করা
     const userListDiv = document.getElementById('user-list');
@@ -514,4 +520,5 @@ window.showDeleteMenu = function(e, uid, msgId, timestamp) {
         document.addEventListener('click', () => menu.remove(), { once: true });
     }, 100);
 };
+
 

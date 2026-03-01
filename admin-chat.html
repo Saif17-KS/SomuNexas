@@ -7,6 +7,27 @@
     <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script>
+    (function() {
+        const userData = localStorage.getItem('currentUser');
+        const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
+
+        if (!userData) {
+            alert("প্রবেশ নিষেধ! আগে লগইন করুন।");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const user = JSON.parse(userData);
+        const userEmail = user.email ? user.email.toLowerCase().trim() : "";
+
+        if (userEmail !== adminEmail) {
+            alert("আপনি এই চ্যাট প্যানেল দেখার অনুমতি রাখেন না!");
+            window.location.href = "index.html";
+            return;
+        }
+    })();
+</script>
     <style>
         :root { --gold: #d4af37; --dark: #0a0a0a; --gray: #1a1a1a; }
         body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--dark); color: white; display: flex; flex-direction: column; height: 100vh; }
@@ -362,4 +383,5 @@
 <script type="module" src="admin-chat.js"></script>
 
 </body>
+
 </html>

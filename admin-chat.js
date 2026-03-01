@@ -336,7 +336,8 @@ window.adminDeleteMsg = function(uid, msgId, type) {
 
                 // ৩. অটো সিন বন্ধ রেখে ম্যানুয়াল সিন লজিক
                 if (m.role === 'user' && m.status !== 'seen' && activeUserId === uid) {
-                    set(ref(db, `chats/${uid}/messages/${msgId}/status`), 'seen');
+                    const msgStatusRef = ref(db, `chats/${uid}/messages/${msgId}/status`);
+                    set(msgStatusRef, 'seen'); 
                 }
             });
             msgDiv.scrollTop = msgDiv.scrollHeight;
@@ -531,6 +532,7 @@ window.showDeleteMenu = function(e, uid, msgId, timestamp) {
         document.addEventListener('click', () => menu.remove(), { once: true });
     }, 100);
 };
+
 
 
 

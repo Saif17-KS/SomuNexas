@@ -153,6 +153,10 @@
             })))
             .arcDashLength(0.5).arcDashGap(2).arcDashAnimateTime(1500).arcStroke(0.4)
             .ringsData(shopLocations).ringColor(() => '#D4AF37').ringMaxRadius(d => d.isHQ ? 6 : 3);
+        const canvas = document.querySelector('canvas');
+        if (!canvas) {
+        console.error("WebGL failed to create canvas. Try another device!");
+        }
 
         function openShopPanel(countryName, lat, lng) {
             document.getElementById('clickSound').play(); // ক্লিক সাউন্ড বাজবে
@@ -216,4 +220,5 @@
     }
     </script>
 </body>
+
 </html>

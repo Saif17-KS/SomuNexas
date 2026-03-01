@@ -28,28 +28,39 @@ window.push = push;
 window.set = set;
 window.update = update;
 window.get = get;
+window.auth = auth;
 
 let activeUserId = null;
 
 /// মালিকের সিকিউরিটি চেক (অ্যাডমিন ছাড়া কেউ চ্যাট দেখতে পারবে না) ///
-(function() {
-    const userData = localStorage.getItem('currentUser');
-    const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
+function checkAdminAccess() {
+        // LocalStorage theke user data neya
+        const userData = localStorage.getItem('currentUser');
+        const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
 
-    if (!userData) {
-        window.location.href = "login.html";
-        return;
+        // 1. Jodi keu login-i na kore thake (mane localStorage khali)
+        if (!userData) {
+            alert("Ei page-e dhukte age login korte hobe!");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const currentUser = JSON.parse(userData);
+        const loggedInEmail = currentUser.email ? currentUser.email.toLowerCase().trim() : "";
+
+        // 2. Jodi login kora thake kintu email admin-er sathe na mile
+        if (loggedInEmail !== adminEmail) {
+            alert("Access Denied! Tumi ei shop-er admin nao.");
+            window.location.href = "index.html"; // Customer-ke home page-e pathiye deya
+            return;
+        }
+
+        // Jodi uporer kono condition-e na pore, tar mane se admin
+        console.log("Welcome Back, Admin Saif!");
     }
 
-    const user = JSON.parse(userData);
-    const userEmail = user.email ? user.email.toLowerCase().trim() : "";
-
-    if (userEmail !== adminEmail) {
-        alert("অ্যাক্সেস ডিনাইড!");
-        window.location.href = "index.html";
-        return;
-    }
-})();
+    // পেজ লোড হওয়ার সাথে সাথেই চেক করো
+    checkAdminAccess();
 /// End ///
     // ৩. বাম পাশের লিস্টে ইউজারদের চ্যাট লোড করা
     const userListDiv = document.getElementById('user-list');
@@ -520,6 +531,7 @@ window.showDeleteMenu = function(e, uid, msgId, timestamp) {
         document.addEventListener('click', () => menu.remove(), { once: true });
     }, 100);
 };
+
 
 
 

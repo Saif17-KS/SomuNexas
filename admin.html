@@ -123,23 +123,24 @@
     window.db = db;
 
     // --- অ্যাডমিন সিকিউরিটি চেক ---
-    function checkAdminAccess() {
+function checkAdminStatus() {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
 
+        // ১. যদি কেউ লগইন না করে থাকে
         if (!currentUser) {
-            alert("দয়া করে আগে লগইন করুন!");
             window.location.href = "login.html";
             return;
         }
 
+        // ২. যদি লগইন করা থাকে কিন্তু সে অ্যাডমিন না হয়
         if (currentUser.email.toLowerCase().trim() !== adminEmail) {
-            alert("প্রবেশ নিষেধ! আপনি অ্যাডমিন নন।");
+            alert("আপনার এই পেজে ঢোকার অনুমতি নেই!");
             window.location.href = "index.html";
             return;
         }
-        
-        console.log("Welcome Admin:", currentUser.name);
+
+        console.log("Welcome Admin, " + currentUser.name);
     }
 
     // পেজ লোড হওয়ার সাথে সাথেই চেক করো
@@ -151,6 +152,7 @@
 </body>
 
 </html>
+
 
 
 

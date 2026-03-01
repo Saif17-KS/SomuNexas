@@ -123,24 +123,30 @@
     window.db = db;
 
     // --- অ্যাডমিন সিকিউরিটি চেক ---
-function checkAdminStatus() {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+function checkAdminAccess() {
+        // LocalStorage theke user data neya
+        const userData = localStorage.getItem('currentUser');
         const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
 
-        // ১. যদি কেউ লগইন না করে থাকে
-        if (!currentUser) {
+        // 1. Jodi keu login-i na kore thake (mane localStorage khali)
+        if (!userData) {
+            alert("Ei page-e dhukte age login korte hobe!");
             window.location.href = "login.html";
             return;
         }
 
-        // ২. যদি লগইন করা থাকে কিন্তু সে অ্যাডমিন না হয়
-        if (currentUser.email.toLowerCase().trim() !== adminEmail) {
-            alert("আপনার এই পেজে ঢোকার অনুমতি নেই!");
-            window.location.href = "index.html";
+        const currentUser = JSON.parse(userData);
+        const loggedInEmail = currentUser.email ? currentUser.email.toLowerCase().trim() : "";
+
+        // 2. Jodi login kora thake kintu email admin-er sathe na mile
+        if (loggedInEmail !== adminEmail) {
+            alert("Access Denied! Tumi ei shop-er admin nao.");
+            window.location.href = "index.html"; // Customer-ke home page-e pathiye deya
             return;
         }
 
-        console.log("Welcome Admin, " + currentUser.name);
+        // Jodi uporer kono condition-e na pore, tar mane se admin
+        console.log("Welcome Back, Admin Saif!");
     }
 
     // পেজ লোড হওয়ার সাথে সাথেই চেক করো
@@ -152,6 +158,7 @@ function checkAdminStatus() {
 </body>
 
 </html>
+
 
 
 

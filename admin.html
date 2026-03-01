@@ -8,6 +8,33 @@
     <link rel="icon" type="image/png" href="icon/KS.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+    (function() {
+        // ১. লোকাল স্টোরেজ থেকে ইউজার ডাটা নাও
+        const userData = localStorage.getItem('currentUser');
+        const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
+
+        // ২. যদি ডাটা একদমই না থাকে (কেউ লগইন করেনি)
+        if (!userData) {
+            alert("প্রবেশ নিষেধ! আগে লগইন করুন।");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const user = JSON.parse(userData);
+        const userEmail = user.email ? user.email.toLowerCase().trim() : "";
+
+        // ৩. যদি লগইন করা থাকে কিন্তু ইমেইল তোমার অ্যাডমিন ইমেইল না হয়
+        if (userEmail !== adminEmail) {
+            alert("আপনি এই শপ-এর অ্যাডমিন নন! আপনার অ্যাক্সেস ডিনাইড।");
+            window.location.href = "index.html"; 
+            return;
+        }
+
+        // সব ঠিক থাকলে কনসোলে দেখাবে
+        console.log("Welcome, Admin Saif!");
+    })();
+</script>
     <style>
         .admin-body { background: #050505; padding: 50px; }
         .admin-container { max-width: 800px; margin: auto; background: #111; padding: 40px; border-radius: 20px; border: 1px solid #d4af37; }
@@ -158,6 +185,7 @@ function checkAdminAccess() {
 </body>
 
 </html>
+
 
 
 

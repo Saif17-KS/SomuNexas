@@ -246,15 +246,15 @@
   import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-  const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyDNv18tFenJP9XpyL7cr9BaA3vg-gLUC3U",
     authDomain: "somunexas.firebaseapp.com",
     projectId: "somunexas",
-    databaseURL: "https://somunexas-default-rtdb.firebaseio.com", // এটি অবশ্যই দিন
+    databaseURL: "https://somunexas-default-rtdb.firebaseio.com", 
     storageBucket: "somunexas.firebasestorage.app",
     messagingSenderId: "880413975961",
     appId: "1:880413975961:web:838932e24b0644473b1f08"
-  };
+};
 
   // ১. অ্যাপটি ইনিশিয়ালাইজ করুন
   const app = initializeApp(firebaseConfig);
@@ -431,4 +431,5 @@ window.verifyCustomOTP = function() {
 <script src="login-script.js"></script>
 
 </body>
+
 </html>

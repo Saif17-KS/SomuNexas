@@ -45,7 +45,7 @@ let activeUserId = null;
     const userEmail = user.email ? user.email.toLowerCase().trim() : "";
 
     if (userEmail !== adminEmail) {
-        alert("প্রবেশ নিষেধ! আপনি এই শপের অ্যাডমিন নন।");
+        alert("অ্যাক্সেস ডিনাইড!");
         window.location.href = "index.html";
         return;
     }
@@ -520,5 +520,6 @@ window.showDeleteMenu = function(e, uid, msgId, timestamp) {
         document.addEventListener('click', () => menu.remove(), { once: true });
     }, 100);
 };
+
 
 

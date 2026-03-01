@@ -5,6 +5,33 @@
     <title>SomuNexus | Customer Database</title>
     <link rel="icon" type="image/png" href="icon/Mekxus_logo_no bg.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<script>
+    (function() {
+        // ১. লোকাল স্টোরেজ থেকে ইউজার ডাটা নাও
+        const userData = localStorage.getItem('currentUser');
+        const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
+
+        // ২. যদি ডাটা একদমই না থাকে (কেউ লগইন করেনি)
+        if (!userData) {
+            alert("প্রবেশ নিষেধ! আগে লগইন করুন।");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const user = JSON.parse(userData);
+        const userEmail = user.email ? user.email.toLowerCase().trim() : "";
+
+        // ৩. যদি লগইন করা থাকে কিন্তু ইমেইল তোমার অ্যাডমিন ইমেইল না হয়
+        if (userEmail !== adminEmail) {
+            alert("আপনি এই শপ-এর অ্যাডমিন নন! আপনার অ্যাক্সেস ডিনাইড।");
+            window.location.href = "index.html"; 
+            return;
+        }
+
+        // সব ঠিক থাকলে কনসোলে দেখাবে
+        console.log("Welcome, Admin Saif!");
+    })();
+</script>
     <style>
         body { font-family: 'Poppins', sans-serif; background: #0b0b0b; color: #fff; padding: 30px; }
         .container { max-width: 1100px; margin: auto; }
@@ -79,19 +106,36 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app); // Auth সার্ভিস চালু করা হলো
 
-/// মালিকের সিকিউরিটি চেক (v9/v10 স্টাইল) ///
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        // তোমার সঠিক ইমেইলটি চেক করা হচ্ছে (১৭ সহ বা ছাড়া তোমার আসল ইমেইল অনুযায়ী)
-        if (user.email !== "mdsaifhasan724317@gmail.com") {
-            alert("আপনি এই পেজ দেখার অনুমতি নেই!");
-            window.location.href = "index.html"; 
+// --- এন্ড অ্যাডমিন চেক ---
+function checkAdminAccess() {
+        // LocalStorage theke user data neya
+        const userData = localStorage.getItem('currentUser');
+        const adminEmail = "mdsaifhasan724317@gmail.com".toLowerCase().trim();
+
+        // 1. Jodi keu login-i na kore thake (mane localStorage khali)
+        if (!userData) {
+            alert("Ei page-e dhukte age login korte hobe!");
+            window.location.href = "login.html";
+            return;
         }
-    } else {
-        // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
-        window.location.href = "login.html";
+
+        const currentUser = JSON.parse(userData);
+        const loggedInEmail = currentUser.email ? currentUser.email.toLowerCase().trim() : "";
+
+        // 2. Jodi login kora thake kintu email admin-er sathe na mile
+        if (loggedInEmail !== adminEmail) {
+            alert("Access Denied! Tumi ei shop-er admin nao.");
+            window.location.href = "index.html"; // Customer-ke home page-e pathiye deya
+            return;
+        }
+
+        // Jodi uporer kono condition-e na pore, tar mane se admin
+        console.log("Welcome Back, Admin Saif!");
     }
-});
+
+    // পেজ লোড হওয়ার সাথে সাথেই চেক করো
+    checkAdminAccess();
+
 /// End ///
 
 document.addEventListener('DOMContentLoaded', () => {

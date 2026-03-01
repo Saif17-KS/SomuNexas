@@ -269,27 +269,24 @@ div.addEventListener('touchmove', () => clearTimeout(pressTimer));
 
 // ২. ফাইলের নিচে এই গ্লোবাল ফাংশনটি আপডেট করো (Firebase call নিশ্চিত করা হয়েছে)
 window.adminDeleteMsg = function(uid, msgId, type) {
+    const msgPath = window.ref(window.db, `chats/${uid}/messages/${msgId}`);
+
     if (type === 'everyone') {
         if (confirm("সবার জন্য ডিলিট করতে চান?")) {
-            // সরাসরি window.db এবং window.ref ব্যবহার করছি যা তুমি আগেই সেট করেছো
-            const msgPath = window.ref(window.db, `chats/${uid}/messages/${msgId}`);
+            // ইম্পোর্ট এর বদলে সরাসরি উইন্ডো থেকে ফায়ারবেস মেথড নাও
             import("https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js").then(m => {
                 m.remove(msgPath).then(() => {
                     console.log("Deleted for everyone");
-                    // মেনু রিমুভ করা
-                    const menu = document.querySelector('.custom-context-menu');
-                    if(menu) menu.remove();
-                });
+                    document.querySelector('.custom-context-menu')?.remove();
+                }).catch(err => alert("Error: " + err.message));
             });
         }
     } else {
-        // Delete for Me: ডাটাবেজে মার্ক করে রাখা
-        const msgPath = window.ref(window.db, `chats/${uid}/messages/${msgId}`);
+        // Delete for Me
         import("https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js").then(m => {
             m.update(msgPath, { deletedByAdmin: true }).then(() => {
-                alert("আপনার দিক থেকে ডিলিট হয়েছে।");
-                const menu = document.querySelector('.custom-context-menu');
-                if(menu) menu.remove();
+                alert("আপনার দিক থেকে ডিলিট হয়েছে।");
+                document.querySelector('.custom-context-menu')?.remove();
             });
         });
     }
@@ -532,6 +529,7 @@ window.showDeleteMenu = function(e, uid, msgId, timestamp) {
         document.addEventListener('click', () => menu.remove(), { once: true });
     }, 100);
 };
+
 
 
 

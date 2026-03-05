@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://saif17-ks.github.io/SomuNexas/sitemap.xml

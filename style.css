@@ -2244,3 +2244,38 @@ div[id] {
     to { opacity: 1; transform: scale(1); }
 }
 /*End chat css*/
+#backToTop {
+    display: none;
+    position: fixed;
+    bottom: 160px; /* চ্যাট আইকনের উপরে রাখার জন্য */
+    right: 30px;
+    z-index: 999;
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(255, 220, 103, 0.5); /* হালকা গোল্ডেন বর্ডার */
+    background: rgba(255, 255, 255, 0.1); /* স্বচ্ছ ব্যাকগ্রাউন্ড */
+    backdrop-filter: blur(10px); /* গ্লাস ইফেক্ট */
+    -webkit-backdrop-filter: blur(10px);
+    color: #d4af37;
+    cursor: pointer;
+    border-radius: 50px; /* আধুনিক স্কয়ারিশ রাউন্ড শেপ */
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+#backToTop:hover {
+    background: #d4af37;
+    color: #000;
+    transform: translateY(-5px); /* হালকা উপরে উঠবে */
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+/* আইকন এনিমেশন */
+#backToTop::after {
+    content: '↑';
+    font-family: Arial, sans-serif;
+}

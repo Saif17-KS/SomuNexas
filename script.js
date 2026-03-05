@@ -546,6 +546,14 @@ window.openProductModal = function(index) {
             </div>
         </div>
     `;
+    modal.style.display = 'flex'; // block এর বদলে flex দাও, তাহলে স্ক্রিন ছোট হলেও কন্টেন্ট মাঝে থাকবে
+    
+    if (window.innerWidth <= 768) {
+        modal.style.overflowY = 'auto'; // ফোনে স্ক্রল সচল করবে
+        modal.style.paddingTop = '20px'; // উপরে কিছু জায়গা রাখবে
+        modal.style.paddingBottom = '20px'; // নিচেও জায়গা রাখবে যাতে বাটন দেখা যায়
+        document.body.style.overflow = 'hidden'; // মডাল খুললে পিছনের পেজ স্ক্রল হওয়া বন্ধ করবে
+    }
     modal.style.display = 'block';
 };
 // ৩. স্লাইডার পরিবর্তনের ফাংশন

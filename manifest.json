@@ -8,17 +8,18 @@
   "theme_color": "#d4af37",
   "icons": [
     {
-      "src": "icon/Mekxus_logo_no bg.png",
+      "src": "icon/Mekxus_logo_no_bg.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icon/Mekxus_logo_no bg.png",
+      "src": "icon/Mekxus_logo_no_bg.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
   ]
 }
+
 

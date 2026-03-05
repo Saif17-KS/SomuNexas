@@ -1,7 +1,8 @@
 {
   "name": "SomuNexas Luxury Store",
   "short_name": "SomuNexas",
-  "start_url": "index.html",
+  "description": "Premium Luxury Global Store by Mekxus Group.",
+  "start_url": "/SomuNexas/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#d4af37",
@@ -17,4 +18,5 @@
       "type": "image/png"
     }
   ]
+
 }

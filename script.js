@@ -2356,3 +2356,25 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
+const backToTopBtn = document.getElementById("backToTop");
+
+window.onscroll = function() {
+    if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+        backToTopBtn.style.display = "flex"; // আইকন সেন্টারে রাখার জন্য flex
+        backToTopBtn.style.opacity = "1";
+    } else {
+        backToTopBtn.style.opacity = "0";
+        setTimeout(() => {
+            if(backToTopBtn.style.opacity === "0") backToTopBtn.style.display = "none";
+        }, 400);
+    }
+};
+
+backToTopBtn.onclick = function() {
+    // একদম স্মুথ টপ স্ক্রল
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+};
+

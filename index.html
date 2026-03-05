@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Somunexas-এ পান সেরা মানের সব প্রিমিয়াম গ্যাজেট, ঘড়ি এবং লাইফস্টাইল প্রোডাক্ট। আমাদের এখানে সুলভ মূল্যে পণ্য পাওয়া যায়।">
+    <meta name="description" content="SomuNexas offers premium quality luxury products worldwide. Explore our exclusive collection of watches, gadgets and more.">
     <meta name="keywords" content="Somunexas, Online Shopping, Bangladesh, Gadgets, Fashion">
     <meta name="author" content="Somunexas">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,11 +15,17 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="manifest" href="manifest.json">
-    <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-    }
-    </script>
+    <meta name="theme-color" content="#d4af37">
+    <link rel="apple-touch-icon" href="icon/Mekxus_logo_no bg.png">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker Registered!'))
+        .catch(err => console.log('SW Registration Failed:', err));
+    });
+  }
+</script>
 </head>
 <body>
 <div id="loader-wrapper">

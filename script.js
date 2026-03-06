@@ -31,6 +31,15 @@ window.get = get;
 
 console.log("Firebase initialized and exports ready!");
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./firebase-messaging-sw.js')
+    .then((registration) => {
+        console.log('Service Worker registered for scope:', registration.scope);
+    }).catch((err) => {
+        console.log('Service Worker registration failed:', err);
+    });
+}
+
 // এই কোডটি তোমার ফাইলের একদম শেষে অথবা Firebase initialization এর পরে বসাও
 const productsRefForUI = ref(db, 'products');
 onValue(productsRefForUI, (snapshot) => {
@@ -2430,4 +2439,5 @@ function saveToken(token) {
 
 // পেজ লোড হওয়ার ৫ সেকেন্ড পর নোটিফিকেশন পপআপ দেখানো
 setTimeout(initPushNotification, 5000);
+
 ///End notification js///

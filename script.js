@@ -2404,7 +2404,7 @@ async function initPushNotification() {
             // ২. টোকেন সংগ্রহ করা
             const currentToken = await getToken(messaging, { 
                 vapidKey: 'BCOFGppHg5yo4Xt5KQcjXwrwAAb4uUdW2A6j57uE7bMiXi2B7WX4EpOeP3UhTINcuDFdKXTjqNtQcCr5kUUDZac',
-                serviceWorkerRegistration: await navigator.serviceWorker.register('./firebase-messaging-sw.js')
+                serviceWorkerRegistration: await navigator.serviceWorker.register('firebase-messaging-sw.js')
             });
 
             if (currentToken) {
@@ -2442,4 +2442,5 @@ function saveToken(token) {
 setTimeout(initPushNotification, 5000);
 
 ///End notification js///
+
 

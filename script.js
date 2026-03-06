@@ -2356,6 +2356,7 @@ window.customerDeleteForEveryone = function(uid, msgId) {
     }
 };
 ///End chat js///
+
 const backToTopBtn = document.getElementById("backToTop");
 
 window.onscroll = function() {
@@ -2378,3 +2379,55 @@ backToTopBtn.onclick = function() {
     });
 };
 
+///notification js///
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
+
+const messaging = getMessaging(window.app); // window.app তোমার ইনিশিয়ালাইজ করা অ্যাপ
+
+async function initPushNotification() {
+    try {
+        // ১. নোটিফিকেশন পারমিশন চাওয়া
+        const permission = await Notification.requestPermission();
+        
+        if (permission === 'granted') {
+            console.log('Notification permission granted!');
+
+            // ২. টোকেন সংগ্রহ করা
+            const currentToken = await getToken(messaging, { 
+                vapidKey: 'BCOFGppHg5yo4Xt5KQcjXwrwAAb4uUdW2A6j57uE7bMiXi2B7WX4EpOeP3UhTINcuDFdKXTjqNtQcCr5kUUDZac' 
+            });
+
+            if (currentToken) {
+                console.log("Token generated successfully:", currentToken);
+                
+                // ৩. টোকেনটি Firebase Realtime Database-এ সেভ করা
+                saveToken(currentToken);
+            } else {
+                console.log('No registration token available.');
+            }
+        } else {
+            console.log('Permission denied for notifications.');
+        }
+    } catch (err) {
+        console.log('An error occurred while retrieving token: ', err);
+    }
+}
+
+function saveToken(token) {
+    // ইউজারের জন্য একটি ইউনিক আইডি (লগইন না থাকলে গেস্ট আইডি)
+    const userId = localStorage.getItem('userId') || 'guest_' + Math.floor(Math.random() * 100000);
+    
+    // database (window.db) ব্যবহার করে সেভ করা
+    const tokenRef = window.ref(window.db, 'fcm_tokens/' + userId);
+    window.set(tokenRef, {
+        token: token,
+        platform: 'web',
+        lastUpdated: new Date().toISOString()
+    }).then(() => {
+        console.log("Token saved to database!");
+    });
+}
+
+// পেজ লোড হওয়ার ৫ সেকেন্ড পর নোটিফিকেশন পপআপ দেখানো
+setTimeout(initPushNotification, 5000);
+///End notification js///

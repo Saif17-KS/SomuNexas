@@ -22,4 +22,27 @@ messaging.onBackgroundMessage((payload) => {
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
+
+});
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close(); // নোটিফিকেশনটি বন্ধ হয়ে যাবে
+
+    // নোটিফিকেশনের সাথে পাঠানো লিঙ্কটি ধরবে
+    const targetUrl = event.notification.data?.url || '/'; 
+
+    event.waitUntil(
+        clients.matchAll({ type: 'window' }).then(windowClients => {
+            // যদি শপ অলরেডি খোলা থাকে তবে সেখানে নিয়ে যাবে
+            for (var i = 0; i < windowClients.length; i++) {
+                var client = windowClients[i];
+                if (client.url === targetUrl && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            // যদি খোলা না থাকে তবে নতুন ট্যাবে ওপেন করবে
+            if (clients.openWindow) {
+                return clients.openWindow(targetUrl);
+            }
+        })
+    );
 });

@@ -2395,31 +2395,28 @@ const messaging = getMessaging(window.app); // window.app তোমার ইন
 
 async function initPushNotification() {
     try {
-        // ১. নোটিফিকেশন পারমিশন চাওয়া
         const permission = await Notification.requestPermission();
         
         if (permission === 'granted') {
-            console.log('Notification permission granted!');
+            console.log('Permission granted!');
 
-            // ২. টোকেন সংগ্রহ করা
+            // প্রথমে সার্ভিস ওয়ার্কার আলাদাভাবে রেজিস্টার করো
+            const registration = await navigator.serviceWorker.register('/SomuNexas/firebase-messaging-sw.js');
+            console.log('Service Worker registered with scope:', registration.scope);
+
+            // তারপর টোকেন নাও
             const currentToken = await getToken(messaging, { 
                 vapidKey: 'BCOFGppHg5yo4Xt5KQcjXwrwAAb4uUdW2A6j57uE7bMiXi2B7WX4EpOeP3UhTINcuDFdKXTjqNtQcCr5kUUDZac',
-                serviceWorkerRegistration: await navigator.serviceWorker.register('/SomuNexas/firebase-messaging-sw.js')
+                serviceWorkerRegistration: registration // এখানে শুধু ভেরিয়েবলটা দাও
             });
 
             if (currentToken) {
                 console.log("Token generated successfully:", currentToken);
-                
-                // ৩. টোকেনটি Firebase Realtime Database-এ সেভ করা
                 saveToken(currentToken);
-            } else {
-                console.log('No registration token available.');
             }
-        } else {
-            console.log('Permission denied for notifications.');
         }
     } catch (err) {
-        console.log('An error occurred while retrieving token: ', err);
+        console.log('Error details: ', err);
     }
 }
 
@@ -2442,6 +2439,7 @@ function saveToken(token) {
 setTimeout(initPushNotification, 5000);
 
 ///End notification js///
+
 
 
 

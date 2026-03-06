@@ -50,6 +50,7 @@ onValue(productsRefForUI, (snapshot) => {
             ...data[key],
             fbKey: key 
         }));
+        window.products.reverse();
         
         products = window.products; // সার্চ ফাংশন ডাটা পায়
         if (typeof products !== 'undefined') {
@@ -395,6 +396,14 @@ window.displayShopProducts = function() {
 
     // ২. রিয়েল-টাইম ডাটা লিস্ট
     const listToDisplay = (window.products && window.products.length > 0) ? window.products : products;
+    const preferredCategory = localStorage.getItem('last_viewed_category');
+    if (preferredCategory) {
+        listToDisplay.sort((a, b) => {
+            if (a.category === preferredCategory && b.category !== preferredCategory) return -1;
+            if (a.category !== preferredCategory && b.category === preferredCategory) return 1;
+            return 0;
+        });
+    }
 
     listToDisplay.forEach((product, pIndex) => {
         let firstImg = "";
@@ -507,6 +516,9 @@ window.openProductModal = function(index) {
     if (!product) {
         console.warn("Product not ready yet or index invalid:", index);
         return;
+    }
+    if (product.category) {
+        localStorage.setItem('last_viewed_category', product.category);
     }
 
     const modal = document.getElementById('product-modal');
@@ -2437,10 +2449,4 @@ function saveToken(token) {
 
 // পেজ লোড হওয়ার ৫ সেকেন্ড পর নোটিফিকেশন পপআপ দেখানো
 setTimeout(initPushNotification, 5000);
-
 ///End notification js///
-
-
-
-
-

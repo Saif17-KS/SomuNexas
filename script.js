@@ -2401,7 +2401,7 @@ async function initPushNotification() {
             console.log('Permission granted!');
 
             // প্রথমে সার্ভিস ওয়ার্কার আলাদাভাবে রেজিস্টার করো
-            const registration = await navigator.serviceWorker.register('/SomuNexas/firebase-messaging-sw.js');
+            const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
             console.log('Service Worker registered with scope:', registration.scope);
 
             // তারপর টোকেন নাও
@@ -2439,6 +2439,7 @@ function saveToken(token) {
 setTimeout(initPushNotification, 5000);
 
 ///End notification js///
+
 
 
 

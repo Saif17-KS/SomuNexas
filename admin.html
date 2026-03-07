@@ -50,7 +50,13 @@
 
 <div class="admin-container">
     <h2>SOMUNEXUS ADMIN</h2>
-
+<div class="input-group" style="margin-top: 20px; position: relative;">
+    <i class="fas fa-search" style="position: absolute; left: 15px; top: 40px; color: #d4af37;"></i>
+    <label style="text-align: center; font-weight: bold; letter-spacing: 1px;">FIND PRODUCT TO EDIT / DELETE</label>
+    <input type="text" id="adminProductSearch" placeholder="পণ্যর নাম লিখে খুঁজুন..." 
+           style="padding-left: 40px; border: 1px solid #d4af37; box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);">
+</div>
+<hr style="border: 0.1px solid #333; margin: 25px 0;">
     <form id="productForm">
         <input type="hidden" id="editProductId">
 
@@ -179,12 +185,32 @@ function checkAdminAccess() {
     // পেজ লোড হওয়ার সাথে সাথেই চেক করো
     checkAdminAccess();
 </script>
+<script>
+    // প্রোডাক্ট সার্চ করার ফাংশন
+    document.getElementById('adminProductSearch')?.addEventListener('input', function(e) {
+        const searchText = e.target.value.toLowerCase().trim();
+        // অ্যাডমিন লিস্টের সব প্রোডাক্ট ডিভ ধরছি
+        const products = document.querySelectorAll('#admin-product-list .admin-item');
 
+        products.forEach(product => {
+            // প্রোডাক্টের নাম যে ট্যাগে আছে সেটি চেক করছি (সাধারণত span বা h4 এ থাকে)
+            const productName = product.innerText.toLowerCase();
+            
+            if (productName.includes(searchText)) {
+                product.style.display = "flex"; // মিললে দেখাবে
+                product.style.animation = "fadeIn 0.3s";
+            } else {
+                product.style.display = "none"; // না মিললে লুকিয়ে ফেলবে
+            }
+        });
+    });
+</script>
 <script type="module" src="script.js"></script>
 
 </body>
 
 </html>
+
 
 
 

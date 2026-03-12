@@ -1197,7 +1197,7 @@ div[id] {
     background: transparent;
     border: 1px solid #d4af37;
     color: #d4af37;
-    padding: 10px 5px;
+    padding: 5px 5px;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 1px;
@@ -1501,6 +1501,70 @@ div[id] {
     background: #d4af37;
     color: #000;
 }
+
+/* শুধু মোবাইল ডিভাইসের জন্য (৭৬৮ পিক্সেলের নিচে) */
+@media (max-width: 768px) {
+    /* বাটন কন্টেইনারকে ফ্লেক্সবক্স দিয়ে সাজানো */
+    .card-action-btns {
+        display: flex !important;
+        flex-direction: row !important; /* পাশাপাশি রাখবে */
+        gap: 5px !important;            /* দুই বাটনের মাঝের গ্যাপ */
+        margin-top: 10px !important;
+        padding: 0 5px !important;
+        justify-content: space-between !important;
+    }
+
+    /* ভিউ এবং অ্যাড টু কার্ট বাটন দুটোর কমন স্টাইল */
+    .card-action-btns button, 
+    .view-btn-premium, 
+    .cart-btn-premium {
+        flex: 1 !important;            /* দুই বাটনকে সমান জায়গা দিবে */
+        padding: 8px 2px !important;    /* ওপর-নিচে ৮px, পাশে ২px */
+        font-size: 10px !important;     /* লেখা ছোট করা হয়েছে যাতে ভেঙে না যায় */
+        height: 35px !important;        /* নির্দিষ্ট উচ্চতা */
+        border-radius: 5px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        white-space: nowrap !important; /* লেখা এক লাইনে রাখবে */
+    }
+
+    /* আইকন থাকলে সেটার সাইজ ছোট করা */
+    .card-action-btns button i {
+        font-size: 10px !important;
+        margin-right: 3px !important;
+    }
+}
+
+/* শুধু মোবাইল ডিভাইসের জন্য */
+@media (max-width: 768px) {
+    /* ১. প্রাইস বক্সের জন্য ফ্লেক্সিবল লেআউট */
+    .price-box {
+        display: flex !important;
+        flex-direction: column !important; /* দামগুলো নিচে নিচে রাখবে */
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        margin-top: 5px !important;
+        min-height: 40px !important; /* নির্দিষ্ট জায়গা ধরে রাখবে */
+    }
+
+    /* ২. আগের দাম (কাটা দাম) ছোট করা */
+    .price-box span[style*="line-through"] {
+        font-size: 11px !important;
+        color: #888 !important;
+        margin-right: 0 !important; /* মোবাইল ভিউতে রাইট মার্জিন দরকার নেই */
+    }
+
+    /* ৩. বর্তমান ডিসকাউন্ট দাম হাইলাইট করা */
+    .price-box span[style*="#d4af37"] {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        color: #d4af37 !important;
+    }
+}
+
 /*phone view*/
 @media (max-width: 768px) {
     /* ১. নেভিগেশন বারকে নিচে নিচে সাজানো */

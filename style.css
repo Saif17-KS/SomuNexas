@@ -2331,35 +2331,44 @@ div[id] {
 #backToTop {
     display: none;
     position: fixed;
-    bottom: 160px; /* চ্যাট আইকনের উপরে রাখার জন্য */
+    bottom: 160px; 
     right: 30px;
     z-index: 999;
-    width: 40px;
-    height: 40px;
-    border: 2px solid rgba(255, 220, 103, 0.5); /* হালকা গোল্ডেন বর্ডার */
-    background: rgba(255, 255, 255, 0.1); /* স্বচ্ছ ব্যাকগ্রাউন্ড */
-    backdrop-filter: blur(10px); /* গ্লাস ইফেক্ট */
+    width: 45px; /* আইকন মোটা তাই সাইজ একটু বাড়ালাম */
+    height: 45px;
+    border: 2px solid rgba(255, 220, 103, 0.5); 
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px);
     color: #d4af37;
     cursor: pointer;
-    border-radius: 50px; /* আধুনিক স্কয়ারিশ রাউন্ড শেপ */
-    font-size: 22px;
+    border-radius: 50%; /* গোল শেপ ছবির মতো */
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    padding: 0;
+    overflow: hidden;
+}
+
+/* তোমার পাঠানো ছবির মতো মোটা আইকন স্টাইল */
+#backToTop span {
+    font-size: 30px; /* আইকনটি বড় দেখাবে */
+    font-weight: bold;
+    line-height: 1;
+    transform: translateY(-2px); /* দাগ ও তীরকে সেন্টারে রাখার জন্য */
+    display: inline-block;
 }
 
 #backToTop:hover {
     background: #d4af37;
     color: #000;
-    transform: translateY(-5px); /* হালকা উপরে উঠবে */
+    transform: translateY(-5px); 
     box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
 }
 
-/* আইকন এনিমেশন */
-#backToTop::after {
-    content: '↑';
-    font-family: Arial, sans-serif;
+/* হোভার করলে আইকনের রঙ কালো হবে */
+#backToTop:hover span {
+    color: #000;
 }

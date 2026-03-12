@@ -410,12 +410,6 @@
     </button>
 </div>
 
-    <button id="chat-bubble" onclick="toggleChat()">
-        <i class="fas fa-comment-dots"></i>
-        <span class="notification-badge" id="chat-notify" style="display:none;">1</span>
-    </button>
-</div>
-
 <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
@@ -886,4 +880,5 @@ window.customerDeleteForEveryone = function(uid, msgId) {
 </script>
 <script type="module" src="script.js"></script>
 </body>
+
 </html>

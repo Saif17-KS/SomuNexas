@@ -30,7 +30,12 @@ body::before {
     opacity: 0.15;
     z-index: -1;
 }
-
+html, body {
+    overflow-x: hidden !important; /* ডানে-বামে নড়া বন্ধ করবে */
+    overflow-y: auto !important;   /* ওপর-নিচে স্ক্রলিং সব সময় চালু রাখবে */
+    height: auto !important;
+    position: relative !important;
+}
 /* Header */
 header { background: #000; padding: 20px 5%; border-bottom: 1px solid #3d351b; position: sticky; top: 0; z-index: 100; }
 .navbar { display: flex; justify-content: space-between; align-items: center; width: 100%; }
@@ -73,8 +78,23 @@ footer { background: #000; padding: 30px; text-align: center; border-top: 1px so
 
 /* Mobile এ ২টা প্রোডাক্ট */
 @media (max-width: 768px) {
+    /* এক লাইনে দুইটা করে কার্ড দেখাবে */
     .product-grid {
-        grid-template-columns: repeat(2, 1fr);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        padding: 5px !important;
+    }
+
+    /* কার্ডের ভেতরের প্যাডিং কমানো */
+    .product-card {
+        padding: 8px !important;
+    }
+
+    /* ডেলিভারি এবং স্টকের ছোট তথ্যগুলো লুকানো বা ছোট করা */
+    .product-info p {
+        font-size: 10px !important;
+        line-height: 1.2;
     }
 }
 /*Start search*/
@@ -301,13 +321,6 @@ footer { background: #000; padding: 30px; text-align: center; border-top: 1px so
 .prev { left: 5px; }
 .next { right: 5px; }
 
-/* তথ্য সেকশন */
-.product-info h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-
 .product-price {
     color: #d4af37;
     font-size: 18px;
@@ -371,8 +384,14 @@ footer { background: #000; padding: 30px; text-align: center; border-top: 1px so
 .product-info h3 {
     font-family: 'Playfair Display', serif;
     color: #fff;
-    font-size: 18px;
-    margin-bottom: 8px;
+    font-size: 12px !important; /* মোবাইলে পড়ার উপযোগী ছোট সাইজ */
+    font-weight: 500;
+    margin-bottom: 5px;
+    white-space: nowrap;      /* নামকে এক লাইনে রাখবে */
+    overflow: hidden;         /* লাইনের বাইরের অংশ কেটে দেবে */
+    text-overflow: ellipsis;  /* শেষে তিনটি ডট (...) দেখাবে */
+    display: block;
+    max-width: 100%;
 }
 
 .price-tag {
@@ -2244,6 +2263,7 @@ div[id] {
     to { opacity: 1; transform: scale(1); }
 }
 /*End chat css*/
+
 #backToTop {
     display: none;
     position: fixed;

@@ -2372,3 +2372,37 @@ div[id] {
 #backToTop:hover span {
     color: #000;
 }
+
+/* ১. পিসির জন্য: যদি পিসিতে ৩ বা ৪ কলাম থাকে, তবে এই কোডটি তাকে ডিস্টার্ব করবে না */
+@media screen and (min-width: 1025px) {
+    #product-container, .product-grid {
+        display: flex !important; /* পিসিতে ফ্লেক্স থাকলে ফ্লেক্স করবে */
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 20px !important;
+    }
+    
+    /* পিসিতে কার্ডের সাইজ ঠিক রাখা */
+    .product-card, #product-container > div {
+        width: 250px !important; /* পিসিতে তোমার পছন্দমতো সাইজ এখানে দাও */
+        min-width: 250px !important;
+    }
+}
+
+/* ২. ফোনের জন্য: শুধুমাত্র মোবাইলেই ২ কলাম হবে */
+@media screen and (max-width: 600px) {
+    #product-container, .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        padding: 10px !important;
+        width: 100% !important;
+    }
+
+    /* ফোনে কার্ডগুলো যাতে ভেঙে না যায় বা বড় না হয় */
+    .product-card, #product-container > div {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+}

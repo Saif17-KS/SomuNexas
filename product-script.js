@@ -621,23 +621,45 @@ if (productId) {
 // --- রিভিউ সিস্টেম শুরু ---
 
 let selectedRating = 5;
+let reviewsLimit = 3; 
 const ADMIN_EMAIL = "mdsaifhasan724317@gmail.com";
+let globalReviewData = null; // ১. ডাটা মনে রাখার জন্য নতুন ভেরিয়েবল
 
-// ১. ইমেজ বড় করে দেখার ফাংশন (Lightbox)
-window.showFullImage = function(src) {
-    let modal = document.getElementById('reviewImageModal');
+// ১. ইমেজ স্লাইডার (Lightbox) লজিক
+let currentImages = [];
+let currentImgIndex = 0;
+
+window.openSlider = function(images, index) {
+    currentImages = images;
+    currentImgIndex = index;
+    let modal = document.getElementById('sliderModal');
     if (!modal) {
         modal = document.createElement('div');
-        modal.id = 'reviewImageModal';
-        modal.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:10000; cursor:pointer;";
-        modal.onclick = () => modal.style.display = 'none';
+        modal.id = 'sliderModal';
+        modal.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); display:flex; align-items:center; justify-content:center; z-index:10000;";
         document.body.appendChild(modal);
     }
-    modal.innerHTML = `<img src="${src}" style="max-width:90%; max-height:90%; border-radius:8px; box-shadow:0 0 20px rgba(255,255,255,0.3);">`;
     modal.style.display = 'flex';
+    updateSliderContent();
 };
 
-// ২. ইমেজ কম্প্রেশন ফাংশন
+function updateSliderContent() {
+    const modal = document.getElementById('sliderModal');
+    modal.innerHTML = `
+        <button onclick="changeImg(-1)" style="position:absolute; left:20px; color:#fff; font-size:40px; background:none; border:none; cursor:pointer;">&#10094;</button>
+        <img src="${currentImages[currentImgIndex]}" style="max-width:85%; max-height:85%; border-radius:8px; transition: 0.3s;">
+        <button onclick="changeImg(1)" style="position:absolute; right:20px; color:#fff; font-size:40px; background:none; border:none; cursor:pointer;">&#10095;</button>
+        <button onclick="document.getElementById('sliderModal').style.display='none'" style="position:absolute; top:20px; right:20px; color:#fff; font-size:30px; background:none; border:none; cursor:pointer;">&times;</button>
+        <div style="position:absolute; bottom:20px; color:#aaa; font-family:sans-serif;">${currentImgIndex + 1} / ${currentImages.length}</div>
+    `;
+}
+
+window.changeImg = function(n) {
+    currentImgIndex = (currentImgIndex + n + currentImages.length) % currentImages.length;
+    updateSliderContent();
+};
+
+// ২. ইমেজ কম্প্রেশন ফাংশন (তোমার আগের কোড)
 async function compressImage(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -659,7 +681,7 @@ async function compressImage(file) {
     });
 }
 
-// ৩. রেটিং সেট করা
+// ৩. রেটিং সেট করা (তোমার আগের কোড)
 window.setRating = function(n) {
     selectedRating = n;
     const stars = document.querySelectorAll('.star-input i');
@@ -669,7 +691,7 @@ window.setRating = function(n) {
     });
 };
 
-// ৪. রিভিউ সাবমিট ফাংশন
+// ৪. রিভিউ সাবমিট ফাংশন (তোমার আগের কোড)
 window.submitReview = async function() {
     const textEl = document.getElementById('reviewText');
     const imageEl = document.getElementById('reviewImage');
@@ -714,70 +736,109 @@ window.submitReview = async function() {
     }
 };
 
-// ৫. রিভিউ লোড এবং ডিসপ্লে (ইমেজ ক্লিক ফিচারসহ)
+// ২. রেন্ডার করার জন্য নতুন ফাংশন (তোমার লুপের কোডটিই এখানে নিয়ে এসেছি)
+function renderReviews() {
+    const displayArea = document.getElementById('reviews-display-area');
+    if (!displayArea || !globalReviewData) return;
+
+    displayArea.innerHTML = "";
+    const myId = (typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.uid : localStorage.getItem('review_user_id');
+    const isAdminSession = (typeof auth !== 'undefined' && auth.currentUser && auth.currentUser.email === ADMIN_EMAIL);
+
+    const allReviews = Object.entries(globalReviewData).reverse();
+    const visibleReviews = allReviews.slice(0, reviewsLimit);
+
+    visibleReviews.forEach(([key, rev]) => {
+        let stars = "";
+        for (let i = 1; i <= 5; i++) {
+            stars += `<i class="${i <= rev.rating ? 'fas' : 'far'} fa-star" style="color:#d4af37; font-size:11px;"></i>`;
+        }
+
+        let imageHtml = '';
+        if (rev.images && rev.images.length > 0) {
+            imageHtml = `<div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">`;
+            rev.images.forEach((img, index) => {
+                const imagesData = JSON.stringify(rev.images).replace(/"/g, '&quot;');
+                if (index < 3) {
+                    imageHtml += `<img src="${img}" onclick="window.openSlider(${imagesData}, ${index})" style="width: 70px; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid #333; cursor:pointer;">`;
+                } else if (index === 3) {
+                    const remaining = rev.images.length - 3;
+                    imageHtml += `
+                        <div onclick="window.openSlider(${imagesData}, ${index})" style="position: relative; width: 70px; height: 70px; cursor:pointer;">
+                            <img src="${img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px; opacity: 0.5;">
+                            <div style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; font-size:14px; background: rgba(0,0,0,0.3); border-radius:6px;">+${remaining}</div>
+                        </div>`;
+                }
+            });
+            imageHtml += `</div>`;
+        }
+
+        const isOwner = (rev.userId === myId);
+        const showDelete = isOwner || isAdminSession;
+
+        const div = document.createElement('div');
+        div.style.cssText = "background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #333;";
+        div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <img src="${rev.userPhoto}" style="width:30px; height:30px; border-radius:50%;">
+                    <div>
+                        <strong style="color:#fff; font-size:13px;">${rev.name}</strong>
+                        <div>${stars}</div>
+                    </div>
+                </div>
+                <small style="color:#555;">${new Date(rev.timestamp).toLocaleDateString()}</small>
+            </div>
+            <p style="color:#ccc; font-size:13px; margin:10px 0;">${rev.text}</p>
+            ${imageHtml}
+            <div style="display:flex; gap:15px; border-top:1px solid #222; padding-top:10px; margin-top:10px;">
+                ${isOwner ? `<button onclick="window.editReview('${key}', \`${rev.text}\`)" style="color:#d4af37; background:none; border:none; cursor:pointer; font-size:11px;">Edit</button>` : ''}
+                ${showDelete ? `<button onclick="window.deleteReview('${key}')" style="color:#ff4d4d; background:none; border:none; cursor:pointer; font-size:11px;">Delete</button>` : ''}
+            </div>
+        `;
+        displayArea.appendChild(div);
+    });
+
+// See More এবং See Less বাটন লজিক
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.cssText = "display:flex; gap:10px; margin-top:10px;";
+
+    // যদি আরও রিভিউ বাকি থাকে তবে See More দেখাবে
+    if (allReviews.length > reviewsLimit) {
+        const seeMoreBtn = document.createElement('button');
+        seeMoreBtn.innerText = "See More Reviews";
+        seeMoreBtn.style.cssText = "flex:1; background:none; border:1px solid #d4af37; color:#d4af37; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;";
+        seeMoreBtn.onclick = () => {
+            reviewsLimit += 5;
+            renderReviews();
+        };
+        buttonContainer.appendChild(seeMoreBtn);
+    }
+
+    // যদি ৩টির বেশি রিভিউ বর্তমানে দেখা যায়, তবে See Less দেখাবে
+    if (reviewsLimit > 3) {
+        const seeLessBtn = document.createElement('button');
+        seeLessBtn.innerText = "See Less";
+        seeLessBtn.style.cssText = "width: 100px; background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;";
+        seeLessBtn.onclick = () => {
+            reviewsLimit = 3; // আবার শুরুতে ফিরিয়ে নেবে
+            renderReviews();
+            // স্ক্রল করে রিভিউ সেকশনের উপরে নিয়ে যাওয়ার জন্য (ঐচ্ছিক)
+            document.getElementById('reviews-display-area').scrollIntoView({ behavior: 'smooth' });
+        };
+        buttonContainer.appendChild(seeLessBtn);
+    }
+
+    if (buttonContainer.hasChildNodes()) {
+        displayArea.appendChild(buttonContainer);
+    }
+}
+
+// ৫. রিভিউ লোড এবং ডিসপ্লে 
 if (typeof productId !== 'undefined') {
     onValue(ref(db, `reviews/${productId}`), (snapshot) => {
-        const displayArea = document.getElementById('reviews-display-area');
-        if (!displayArea) return;
-
-        const data = snapshot.val();
-        displayArea.innerHTML = "";
-        const myId = (typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.uid : localStorage.getItem('review_user_id');
-        const isAdminSession = (typeof auth !== 'undefined' && auth.currentUser && auth.currentUser.email === ADMIN_EMAIL);
-
-        if (data) {
-            Object.entries(data).reverse().forEach(([key, rev]) => {
-                let stars = "";
-                for (let i = 1; i <= 5; i++) {
-                    stars += `<i class="${i <= rev.rating ? 'fas' : 'far'} fa-star" style="color:#d4af37; font-size:11px;"></i>`;
-                }
-
-                let imageHtml = '';
-                if (rev.images && rev.images.length > 0) {
-                    imageHtml = `<div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">`;
-                    rev.images.forEach((img, index) => {
-                        // ছবিতে ক্লিক করলে window.showFullImage ফাংশন কল হবে
-                        if (index < 3) {
-                            imageHtml += `<img src="${img}" onclick="window.showFullImage('${img}')" style="width: 70px; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid #333; cursor:pointer;">`;
-                        } else if (index === 3) {
-                            const remaining = rev.images.length - 3;
-                            imageHtml += `
-                                <div onclick="window.showFullImage('${img}')" style="position: relative; width: 70px; height: 70px; cursor:pointer;">
-                                    <img src="${img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px; opacity: 0.5;">
-                                    <div style="position: absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; font-size:14px; background: rgba(0,0,0,0.3); border-radius:6px;">+${remaining}</div>
-                                </div>`;
-                        }
-                    });
-                    imageHtml += `</div>`;
-                }
-
-                const isOwner = (rev.userId === myId);
-                const showDelete = isOwner || isAdminSession;
-
-                const div = document.createElement('div');
-                div.style.cssText = "background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #333;";
-                
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="${rev.userPhoto}" style="width:30px; height:30px; border-radius:50%;">
-                            <div>
-                                <strong style="color:#fff; font-size:13px;">${rev.name}</strong>
-                                <div>${stars}</div>
-                            </div>
-                        </div>
-                        <small style="color:#555;">${new Date(rev.timestamp).toLocaleDateString()}</small>
-                    </div>
-                    <p style="color:#ccc; font-size:13px; margin:10px 0;">${rev.text}</p>
-                    ${imageHtml}
-                    <div style="display:flex; gap:15px; border-top:1px solid #222; padding-top:10px; margin-top:10px;">
-                        ${isOwner ? `<button onclick="window.editReview('${key}', \`${rev.text}\`)" style="color:#d4af37; background:none; border:none; cursor:pointer; font-size:11px;">Edit</button>` : ''}
-                        ${showDelete ? `<button onclick="window.deleteReview('${key}')" style="color:#ff4d4d; background:none; border:none; cursor:pointer; font-size:11px;">Delete</button>` : ''}
-                    </div>
-                `;
-                displayArea.appendChild(div);
-            });
-        }
+        globalReviewData = snapshot.val(); // ২. ডাটা গ্লোবাল ভেরিয়েবলে সেভ করা হলো
+        renderReviews();
     });
 }
 

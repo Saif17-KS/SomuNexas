@@ -623,7 +623,7 @@ if (productId) {
 let selectedRating = 5;
 let reviewsLimit = 3; 
 const ADMIN_EMAIL = "mdsaifhasan724317@gmail.com";
-let globalReviewData = null; // ১. ডাটা মনে রাখার জন্য নতুন ভেরিয়েবল
+let globalReviewData = null; 
 
 // ১. ইমেজ স্লাইডার (Lightbox) লজিক
 let currentImages = [];
@@ -659,7 +659,7 @@ window.changeImg = function(n) {
     updateSliderContent();
 };
 
-// ২. ইমেজ কম্প্রেশন ফাংশন (তোমার আগের কোড)
+// ২. ইমেজ কম্প্রেশন ফাংশন
 async function compressImage(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -681,7 +681,7 @@ async function compressImage(file) {
     });
 }
 
-// ৩. রেটিং সেট করা (তোমার আগের কোড)
+// ৩. রেটিং সেট করা
 window.setRating = function(n) {
     selectedRating = n;
     const stars = document.querySelectorAll('.star-input i');
@@ -691,14 +691,14 @@ window.setRating = function(n) {
     });
 };
 
-// ৪. রিভিউ সাবমিট ফাংশন (তোমার আগের কোড)
+// ৪. রিভিউ সাবমিট ফাংশন
 window.submitReview = async function() {
     const textEl = document.getElementById('reviewText');
     const imageEl = document.getElementById('reviewImage');
     const text = textEl ? textEl.value.trim() : "";
     const user = typeof auth !== 'undefined' ? auth.currentUser : null;
 
-    if (!text) return alert("দয়া করে কিছু লিখুন!");
+    if (!text) return alert("দয়া করে কিছু লিখুন!");
 
     let uid = user ? user.uid : localStorage.getItem('review_user_id');
     if (!uid) {
@@ -729,21 +729,24 @@ window.submitReview = async function() {
         await push(ref(db, `reviews/${productId}`), reviewData);
         textEl.value = "";
         imageEl.value = "";
-        alert("ধন্যবাদ! রিভিউ সফলভাবে জমা হয়েছে।");
+        alert("ধন্যবাদ! রিভিউ সফলভাবে জমা হয়েছে।");
     } catch (e) {
         console.error(e);
-        alert("ভুল হয়েছে: ফায়ারবেস রুলস চেক করুন।");
+        alert("ভুল হয়েছে: ফায়ারবেস রুলস চেক করুন।");
     }
 };
 
-// ২. রেন্ডার করার জন্য নতুন ফাংশন (তোমার লুপের কোডটিই এখানে নিয়ে এসেছি)
+// ২. রেন্ডার করার ফাংশন
 function renderReviews() {
     const displayArea = document.getElementById('reviews-display-area');
     if (!displayArea || !globalReviewData) return;
 
     displayArea.innerHTML = "";
-    const myId = (typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser.uid : localStorage.getItem('review_user_id');
-    const isAdminSession = (typeof auth !== 'undefined' && auth.currentUser && auth.currentUser.email === ADMIN_EMAIL);
+    
+    // অ্যাডমিন এবং ইউজার আইডি চেক
+    const user = (typeof auth !== 'undefined') ? auth.currentUser : null;
+    const myId = user ? user.uid : localStorage.getItem('review_user_id');
+    const isAdmin = user && user.email === ADMIN_EMAIL;
 
     const allReviews = Object.entries(globalReviewData).reverse();
     const visibleReviews = allReviews.slice(0, reviewsLimit);
@@ -773,8 +776,9 @@ function renderReviews() {
             imageHtml += `</div>`;
         }
 
+        // বাটন দেখানোর কন্ডিশন (মালিক অথবা অ্যাডমিন)
         const isOwner = (rev.userId === myId);
-        const showDelete = isOwner || isAdminSession;
+        const showButtons = isOwner || isAdmin;
 
         const div = document.createElement('div');
         div.style.cssText = "background:#1a1a1a; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #333;";
@@ -793,17 +797,15 @@ function renderReviews() {
             ${imageHtml}
             <div style="display:flex; gap:15px; border-top:1px solid #222; padding-top:10px; margin-top:10px;">
                 ${isOwner ? `<button onclick="window.editReview('${key}', \`${rev.text}\`)" style="color:#d4af37; background:none; border:none; cursor:pointer; font-size:11px;">Edit</button>` : ''}
-                ${showDelete ? `<button onclick="window.deleteReview('${key}')" style="color:#ff4d4d; background:none; border:none; cursor:pointer; font-size:11px;">Delete</button>` : ''}
+                ${showButtons ? `<button onclick="window.deleteReview('${key}')" style="color:#ff4d4d; background:none; border:none; cursor:pointer; font-size:11px;">Delete</button>` : ''}
             </div>
         `;
         displayArea.appendChild(div);
     });
 
-// See More এবং See Less বাটন লজিক
     const buttonContainer = document.createElement('div');
     buttonContainer.style.cssText = "display:flex; gap:10px; margin-top:10px;";
 
-    // যদি আরও রিভিউ বাকি থাকে তবে See More দেখাবে
     if (allReviews.length > reviewsLimit) {
         const seeMoreBtn = document.createElement('button');
         seeMoreBtn.innerText = "See More Reviews";
@@ -815,15 +817,13 @@ function renderReviews() {
         buttonContainer.appendChild(seeMoreBtn);
     }
 
-    // যদি ৩টির বেশি রিভিউ বর্তমানে দেখা যায়, তবে See Less দেখাবে
     if (reviewsLimit > 3) {
         const seeLessBtn = document.createElement('button');
         seeLessBtn.innerText = "See Less";
         seeLessBtn.style.cssText = "width: 100px; background:none; border:1px solid #ff4d4d; color:#ff4d4d; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;";
         seeLessBtn.onclick = () => {
-            reviewsLimit = 3; // আবার শুরুতে ফিরিয়ে নেবে
+            reviewsLimit = 3;
             renderReviews();
-            // স্ক্রল করে রিভিউ সেকশনের উপরে নিয়ে যাওয়ার জন্য (ঐচ্ছিক)
             document.getElementById('reviews-display-area').scrollIntoView({ behavior: 'smooth' });
         };
         buttonContainer.appendChild(seeLessBtn);
@@ -837,22 +837,26 @@ function renderReviews() {
 // ৫. রিভিউ লোড এবং ডিসপ্লে 
 if (typeof productId !== 'undefined') {
     onValue(ref(db, `reviews/${productId}`), (snapshot) => {
-        globalReviewData = snapshot.val(); // ২. ডাটা গ্লোবাল ভেরিয়েবলে সেভ করা হলো
+        globalReviewData = snapshot.val(); 
         renderReviews();
     });
 }
 
-// এডিট এবং ডিলিট লজিক
+// এডিট এবং ডিলিট লজিক (নিশ্চিত করা হয়েছে productId এর ব্যবহার)
 window.editReview = function(key, oldText) {
     const newText = prompt("আপনার রিভিউটি সংশোধন করুন:", oldText);
     if (newText && newText !== oldText) {
-        update(ref(db, `reviews/${productId}/${key}`), { text: newText });
+        update(ref(db, `reviews/${productId}/${key}`), { text: newText })
+        .then(() => alert("রিভিউ আপডেট হয়েছে।"))
+        .catch((e) => alert("আপডেট করা সম্ভব হয়নি।"));
     }
 };
 
 window.deleteReview = function(key) {
     if (confirm("আপনি কি এটি ডিলিট করতে চান?")) {
-        remove(ref(db, `reviews/${productId}/${key}`));
+        remove(ref(db, `reviews/${productId}/${key}`))
+        .then(() => alert("রিভিউ ডিলিট হয়েছে।"))
+        .catch((e) => alert("ডিলিট করা সম্ভব হয়নি।"));
     }
 };
 // --- রিভিউ সিস্টেম শেষ ---

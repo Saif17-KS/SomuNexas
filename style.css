@@ -2361,7 +2361,7 @@ div[id] {
 }
 
 #backToTop:hover svg {
-    color: #000; /* হোভার করলে কালো হবে */
+    color: #000; 
 }
 
 /* আইকনের স্টাইল */
@@ -2392,6 +2392,8 @@ div[id] {
         font-size: 18px;
     }
 }
+
+
 /* ১. পিসির জন্য: যদি পিসিতে ৩ বা ৪ কলাম থাকে, তবে এই কোডটি তাকে ডিস্টার্ব করবে না */
 @media screen and (min-width: 1025px) {
     #product-container, .product-grid {
@@ -2423,5 +2425,95 @@ div[id] {
         width: 100% !important;
         min-width: 0 !important;
         max-width: 100% !important;
+    }
+}
+
+/*game css*/
+/* মোবাইলের জন্য স্পেশাল স্টাইল */
+@media screen and (max-width: 768px) {
+    #offline-game-overlay {
+        padding: 5px 0 !important; /* উপরের গ্যাপ কমানো */
+    }
+
+    #game-container {
+        width: 98% !important;
+        height: 60vh !important; /* স্ক্রিনের ৬০% জুড়ে গেম থাকবে */
+        margin: 0 auto;
+    }
+
+    #gameCanvas {
+        width: 100% !important;
+        height: 100% !important;
+        touch-action: none; /* স্ক্রল হওয়া আটকাবে */
+    }
+
+    /* উপরের টেক্সট ছোট করা */
+    h2 { font-size: 20px !important; margin: 5px 0 !important; }
+    #discount-status { font-size: 14px !important; }
+
+    /* বাটনগুলো মোবাইলে সুন্দর দেখানোর জন্য */
+    #pauseBtn, #menuBtn {
+        padding: 10px 15px !important;
+        font-size: 14px !important;
+    }
+    
+    /* মেনু বক্স মোবাইলে বড় দেখাবে */
+    #game-menu {
+        width: 85% !important;
+        padding: 15px !important;
+    }
+}
+/* বাটনের মেইন কন্টেইনার */
+.game-btn-container {
+    text-align: center;
+    padding: 10px; /* গ্যাপ কমানো হয়েছে */
+    display: flex;
+    justify-content: center;
+}
+
+/* ছোট, গোল্ডেন এবং প্রিমিয়াম বাটন স্টাইল */
+.dragon-btn-small {
+    position: relative;
+    padding: 12px 30px; /* আগের চেয়ে ছোট প্যাডিং */
+    font-size: 18px; /* ফন্ট সাইজ কমানো হয়েছে */
+    font-weight: bold;
+    color: #000000; /* গাড়ো ব্রাউন কালারের টেক্সট (Submit Review এর মতো) */
+    
+    /* গোল্ডেন গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
+    background: linear-gradient(180deg, #d8bb65 0%, #f8d04a 50%, #9c730b 100%);
+    
+    border: 1px solid rgba(184, 134, 11, 0.6); /* হালকা বর্ডার */
+    border-radius: 30px; /* রাউন্ডেড কর্নার */
+    cursor: pointer;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.3s ease-in-out;
+    
+    display: flex;
+    align-items: center;
+    gap: 8px; /* ড্রাগন আইকন আর টেক্সটের গ্যাপ */
+    
+    /* টেক্সট যাতে এক লাইনে থাকে */
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* পিসিতে হোভার ইফেক্ট (Glow বাড়বে) */
+.dragon-btn-small:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(238, 211, 125, 0.9);
+}
+
+/* মোবাইলে ক্লিক করলে হালকা চেপে যাবে */
+.dragon-btn-small:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* ২. মোবাইল রেসপনসিভনেস (Phone Fitting) */
+@media screen and (max-width: 480px) {
+    .dragon-btn-small {
+        padding: 10px 20px; /* মোবাইলে আরও ছোট প্যাডিং */
+        font-size: 16px; /* মোবাইলে ছোট ফন্ট */
+        width: auto; /* ফিক্সড উইথ না, কন্টেন্ট অনুযায়ী চওড়া হবে */
+        max-width: 90%; /* স্ক্রিনের বাইরে যাবে না */
     }
 }

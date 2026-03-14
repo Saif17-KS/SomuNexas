@@ -2372,7 +2372,23 @@ div[id] {
 #backToTop:hover span {
     color: #000;
 }
+/* ফোনের জন্য আইকন পজিশন ফিক্স */
+@media screen and (max-width: 600px) {
+    #backToTop {
+        display: flex !important; /* নিশ্চিত করা হচ্ছে এটা ফ্লেক্স থাকবে */
+        align-items: center !important;
+        justify-content: center !important;
+    }
 
+    #backToTop span {
+        font-size: 24px !important; /* ফোনে খুব বড় হয়ে গেলে বক্সের বাইরে চলে যায়, তাই একটু ছোট করলাম */
+        display: block !important;
+        width: auto !important;
+        height: auto !important;
+        line-height: 0 !important; /* এটি আইকনকে বক্সের একদম পেটে (মাঝখানে) নিয়ে আসবে */
+        transform: translateY(0) !important; /* আগের ট্রান্সফর্ম রিসেট করা হলো */
+    }
+}
 /* ১. পিসির জন্য: যদি পিসিতে ৩ বা ৪ কলাম থাকে, তবে এই কোডটি তাকে ডিস্টার্ব করবে না */
 @media screen and (min-width: 1025px) {
     #product-container, .product-grid {

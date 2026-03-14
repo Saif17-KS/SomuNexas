@@ -2330,7 +2330,7 @@ div[id] {
 
 /* --- Go to Top Button: Professional Look --- */
 #backToTop {
-    display: none; /* জাভাস্ক্রিপ্ট দিয়ে অন হবে */
+    display: flex !important;
     position: fixed;
     bottom: 160px;
     right: 30px;
@@ -2346,12 +2346,22 @@ div[id] {
     cursor: pointer;
     border-radius: 50%; /* একদম গোল */
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center !important;
+    justify-content: center !important;
     transition: all 0.3s ease-in-out;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     padding: 0;
     overflow: hidden;
+}
+#backToTop svg {
+    width: 24px;
+    height: 24px;
+    color: #d4af37; /* গোল্ডেন কালার */
+    transition: transform 0.3s ease;
+}
+
+#backToTop:hover svg {
+    color: #000; /* হোভার করলে কালো হবে */
 }
 
 /* আইকনের স্টাইল */

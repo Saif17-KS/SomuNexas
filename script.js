@@ -1669,14 +1669,15 @@ window.onload = function() {
 
 ////mobile view js/////
 // হ্যামবার্গার মেনু ক্লিক করলে মেনু লিস্ট আসবে
-document.getElementById('menu-toggle-btn').onclick = function() {
-    var menu = document.getElementById('nav-menu');
-    if (menu.style.display === "flex") {
-        menu.style.display = "none";
-    } else {
-        menu.style.display = "flex";
-    }
-};
+const menuBtn = document.getElementById('menu-toggle-btn');
+if (menuBtn) {
+    menuBtn.onclick = function() {
+        var menu = document.getElementById('nav-menu');
+        if (menu) {
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+    };
+}
 ////end////
 ////page load java///
 // এই ফাংশনটি নিশ্চিত করবে এরর থাকলেও লোডার চলে যাবে
@@ -2380,25 +2381,32 @@ window.customerDeleteForEveryone = function(uid, msgId) {
 
 const backToTopBtn = document.getElementById("backToTop");
 
-window.onscroll = function() {
-    if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
-        backToTopBtn.style.display = "flex"; // আইকন সেন্টারে রাখার জন্য flex
-        backToTopBtn.style.opacity = "1";
-    } else {
-        backToTopBtn.style.opacity = "0";
-        setTimeout(() => {
-            if(backToTopBtn.style.opacity === "0") backToTopBtn.style.display = "none";
-        }, 400);
-    }
-};
+// শুধুমাত্র যদি বাটনটি পেজে থাকে, তবেই এই কোড কাজ করবে
+if (backToTopBtn) {
+    window.onscroll = function() {
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            backToTopBtn.style.display = "flex"; 
+            backToTopBtn.style.opacity = "1";
+        } else {
+            backToTopBtn.style.opacity = "0";
+            setTimeout(() => {
+                // এখানেও চেক রাখা ভালো
+                if(backToTopBtn && backToTopBtn.style.opacity === "0") {
+                    backToTopBtn.style.display = "none";
+                }
+            }, 400);
+        }
+    };
 
-backToTopBtn.onclick = function() {
-    // একদম স্মুথ টপ স্ক্রল
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-};
+    backToTopBtn.onclick = function() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
+} else {
+    console.log("Back to top button not found on this page, skipping scroll logic.");
+}
 
 ///notification js///
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
@@ -2450,3 +2458,4 @@ function saveToken(token) {
 // পেজ লোড হওয়ার ৫ সেকেন্ড পর নোটিফিকেশন পপআপ দেখানো
 setTimeout(initPushNotification, 5000);
 ///End notification js///
+

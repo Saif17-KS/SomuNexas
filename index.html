@@ -85,18 +85,95 @@
         <i class="fas fa-chevron-down" id="drop-icon"></i>
     </div>
 
-    <div class="category-menu" id="categoryMenu">
+<div class="category-menu" id="categoryMenu">
         <div class="cat-grid">
-            <div class="cat-item" onclick="filterCategory('all', this)"><i class="fas fa-th-large"></i> All Products</div>
-            <div class="cat-item" onclick="filterCategory('Watch', this)"><i class="fas fa-clock"></i> Luxury Watches</div>
-            <div class="cat-item" onclick="filterCategory('Electronics', this)"><i class="fas fa-mobile-alt"></i> Electronics</div>
-            <div class="cat-item" onclick="filterCategory('Headphone', this)"><i class="fas fa-headphones"></i> Premium Audio</div>
-            <div class="cat-item" onclick="filterCategory('Clothing', this)"><i class="fas fa-tshirt"></i> Men's Fashion</div>
-            <div class="cat-item" onclick="filterCategory('Women', this)"><i class="fas fa-female"></i> Women's Style</div>
-            <div class="cat-item" onclick="filterCategory('Footwear', this)"><i class="fas fa-shoe-prints"></i> Footwear</div>
-            <div class="cat-item" onclick="filterCategory('Perfume', this)"><i class="fas fa-flask"></i> Fragrances</div>
-            <div class="cat-item" onclick="filterCategory('Jewelry', this)"><i class="fas fa-gem"></i> Jewelry</div>
-            <div class="cat-item" onclick="filterCategory('Accessories', this)"><i class="fas fa-glasses"></i> Accessories</div>
+            <!-- All Products -->
+            <div class="cat-item" onclick="filterCategory('all', this)">
+                <i class="fas fa-th-large"></i> All Products
+            </div>
+
+            <!-- ১. Electronics & Gadgets (সাব-মেনু সহ) -->
+            <div class="cat-item has-submenu">
+                <div class="main-cat-link" onclick="filterCategory('Electronics_Group', this)">
+                    <i class="fas fa-mobile-alt"></i> Electronics & Gadgets <i class="fas fa-caret-down sub-arrow"></i>
+                </div>
+                <div class="sub-category-list">
+                    <span onclick="event.stopPropagation(); filterCategory('Electronics_Mobile', this)">📱 Mobile & Tablets</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Electronics', this)">💻 Computer & Laptops</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Headphone', this)">🎧 Headphone & Audio</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Watch', this)">⌚ Luxury & Smart Watches</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Electronics_Drone', this)">🛸 Drone & Quadcopters</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Electronics_Camera', this)">📷 Camera & Photography</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Electronics_Gaming', this)">🎮 Gaming Consoles & Accessories</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Electronics_Appliances', this)">📺 Home Appliances & TV</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Electronics_Gadget', this)">🔌 Smart Gadgets & Component</span>
+                </div>
+            </div>
+
+            <!-- ২. Men's Fashion (সাব-মেনু সহ) -->
+            <div class="cat-item has-submenu">
+                <div class="main-cat-link" onclick="filterCategory('Men_Group', this)">
+                    <i class="fas fa-tshirt"></i> Men's Fashion <i class="fas fa-caret-down sub-arrow"></i>
+                </div>
+                <div class="sub-category-list">
+                    <span onclick="event.stopPropagation(); filterCategory('Clothing', this)">👕 T-Shirts & Polos</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Men_Shirt', this)">👔 Casual & Formal Shirts</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Men_Panjabi', this)">🕌 Panjabi & Traditional</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Men_Pants', this)">👖 Jeans & Trousers</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Men_Activewear', this)">👟 Activewear & Jerseys</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Men_Winter', this)">🧥 Winter Jackets & Hoodies</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Men_Innerwear', this)">🩲 Innerwear & Boxers</span>
+                </div>
+            </div>
+
+            <!-- ৩. Women's Style (সাব-মেনু সহ) -->
+            <div class="cat-item has-submenu">
+                <div class="main-cat-link" onclick="filterCategory('Women_Group', this)">
+                    <i class="fas fa-female"></i> Women's Style <i class="fas fa-caret-down sub-arrow"></i>
+                </div>
+                <div class="sub-category-list">
+                    <span onclick="event.stopPropagation(); filterCategory('Women_Dress', this)">👗 Dress & Traditional Wear</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Women_Makeup', this)">💄 Makeup</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Women_HairCare', this)">💇‍♀️ Hair Care</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Women_SkinCare', this)">🧴 Skin Care</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Women_Jewelry', this)">💍 Jewelry</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Women_Accessories', this)">👜 Women Accessories</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Women_UnderGarments', this)">👙 Under Garments</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Women_Fragrance', this)">✨ Fragrance</span>
+                </div>
+            </div>
+
+            <!-- ৪. Mom & Baby (সাব-মেনু সহ) -->
+            <div class="cat-item has-submenu">
+                <div class="main-cat-link" onclick="filterCategory('Mom_Baby_Group', this)">
+                    <i class="fas fa-baby-carriage"></i> Mom & Baby <i class="fas fa-caret-down sub-arrow"></i>
+                </div>
+                <div class="sub-category-list">
+                    <span onclick="event.stopPropagation(); filterCategory('Mom_Care', this)">🤰 Mom Care & Essentials</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Baby_Clothing', this)">👶 Baby Clothing</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Baby_Toys', this)">🧸 Baby Toys & Games</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Baby_Diapering', this)">🧷 Diaper & Wipes</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Baby_Feeding', this)">🍼 Feeding & Nursing</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Baby_SkinCare', this)">🧼 Baby Skin & Hair Care</span>
+                </div>
+            </div>
+
+            <!-- ৫. Footwear Collection (সাব-মেনু সহ) -->
+            <div class="cat-item has-submenu">
+                <div class="main-cat-link" onclick="filterCategory('Footwear_Group', this)">
+                    <i class="fas fa-shoe-prints"></i> Footwear Collection <i class="fas fa-caret-down sub-arrow"></i>
+                </div>
+                <div class="sub-category-list">
+                    <span onclick="event.stopPropagation(); filterCategory('Footwear', this)">👞 Men's Shoes & Sandals</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Footwear_Women', this)">👠 Women's Heels & Flats</span>
+                    <span onclick="event.stopPropagation(); filterCategory('Footwear_Baby', this)">🧦 Kids & Baby Shoes</span>
+                </div>
+            </div>
+
+            <!-- ৬. General Accessories -->
+            <div class="cat-item" onclick="filterCategory('Accessories', this)">
+                <i class="fas fa-glasses"></i> General Accessories
+            </div>
         </div>
     </div>
 </div>

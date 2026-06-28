@@ -1669,15 +1669,14 @@ window.onload = function() {
 
 ////mobile view js/////
 // হ্যামবার্গার মেনু ক্লিক করলে মেনু লিস্ট আসবে
-const menuBtn = document.getElementById('menu-toggle-btn');
-if (menuBtn) {
-    menuBtn.onclick = function() {
-        var menu = document.getElementById('nav-menu');
-        if (menu) {
-            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-        }
-    };
-}
+document.getElementById('menu-toggle-btn').onclick = function() {
+    var menu = document.getElementById('nav-menu');
+    if (menu.style.display === "flex") {
+        menu.style.display = "none";
+    } else {
+        menu.style.display = "flex";
+    }
+};
 ////end////
 ////page load java///
 // এই ফাংশনটি নিশ্চিত করবে এরর থাকলেও লোডার চলে যাবে
@@ -1725,29 +1724,47 @@ function toggleCategoryMenu() {
     }
 }
 
-// ২. ক্যাটাগরি ফিল্টার ফাংশন
-function filterCategory(category, element) {
-    console.log("Filtering for:", category);
+// --- CATEGORY FILTER SYSTEM (MODIFIED FOR MODULE CONTEXT WITH SUB-CATEGORIES) ---
+
+// সাব-ক্যাটাগরি ম্যাচিং করার জন্য একটি এক্সট্রা হেল্পার ফাংশন (যা আগের কোনো কোড স্পর্শ করেনি)
+function checkSubCategoryMatch(productCat, selectedCat) {
+    if (selectedCat === 'all' || selectedCat === '') return true;
     
-    // ক্যাটাগরি অনুযায়ী ডাটা ফিল্টার (আপনার আগের লজিক)
-    const filtered = (category === 'all') 
-        ? products 
-        : products.filter(p => p.category === category);
+    // ১. হুবহু সাব-ক্যাটাগরি মিললে (যেমন: Women_Dress, Electronics_Mobile ইত্যাদি)
+    if (productCat === selectedCat) return true;
     
-    renderFilteredProducts(filtered);
-    
-    // মেনু বন্ধ করা
-    const menu = document.getElementById('categoryMenu');
-    if (menu) {
-        menu.classList.remove('active');
-        document.getElementById('drop-icon').style.transform = 'rotate(0deg)';
+    // ২. পুরো Electronics গ্রুপ সিলেক্ট করলে তার ভেতরের সব সাব-ক্যাটাগরি দেখাবে
+    if (selectedCat === 'Electronics_Group') {
+        const electronicsVals = ['Electronics', 'Headphone', 'Watch', 'Electronics_Mobile', 'Electronics_Drone', 'Electronics_Camera', 'Electronics_Gaming', 'Electronics_Appliances', 'Electronics_Gadget'];
+        return electronicsVals.includes(productCat);
     }
+    
+    // ৩. পুরো Men's Fashion গ্রুপ সিলেক্ট করলে তার ভেতরের সব সাব-ক্যাটাগরি দেখাবে
+    if (selectedCat === 'Men_Group') {
+        const menVals = ['Clothing', 'Men_Shirt', 'Men_Panjabi', 'Men_Pants', 'Men_Activewear', 'Men_Winter', 'Men_Innerwear'];
+        return menVals.includes(productCat);
+    }
+    
+    // ৪. পুরো Women's Style গ্রুপ সিলেক্ট করলে তার ভেতরের সব সাব-ক্যাটাগরি দেখাবে
+    if (selectedCat === 'Women_Group') {
+        const womenVals = ['Women_Dress', 'Women_Makeup', 'Women_HairCare', 'Women_SkinCare', 'Women_Jewelry', 'Women_Accessories', 'Women_UnderGarments', 'Women_Fragrance'];
+        return womenVals.includes(productCat);
+    }
+    
+    // ৫. পুরো Mom & Baby গ্রুপ সিলেক্ট করলে
+    if (selectedCat === 'Mom_Baby_Group') {
+        return productCat && (productCat.startsWith('Mom_') || productCat.startsWith('Baby_'));
+    }
+    
+    // ৬. পুরো Footwear Collection গ্রুপ সিলেক্ট করলে
+    if (selectedCat === 'Footwear_Group') {
+        return productCat && productCat.startsWith('Footwear');
+    }
+
+    return false;
 }
-/////End page filter catagory///
 
-// --- CATEGORY FILTER SYSTEM (MODIFIED FOR MODULE CONTEXT) ---
-
-// ১. ড্রপডাউন মেনু খোলা এবং বন্ধ করার ফাংশন
+// ১. ড্রপডাউন মেনু খোলা এবং বন্ধ করার ফাংশন (হুবহু আগের কোড)
 window.toggleCategoryMenu = function() {
     const menu = document.getElementById('categoryMenu');
     const icon = document.getElementById('drop-icon');
@@ -1760,22 +1777,22 @@ window.toggleCategoryMenu = function() {
     }
 };
 
-// ২. ক্যাটাগরি অনুযায়ী ফিল্টার করার মূল লজিক
+// ২. ক্যাটাগরি অনুযায়ী ফিল্টার করার মূল লজিক (তোমার কোড, শুধু ফিল্টারিং কন্ডিশন স্মার্ট করা হয়েছে)
 window.filterCategory = function(category, element) {
     console.log("Filtering products for category:", category);
 
-    // সব ক্যাটাগরি আইটেম থেকে হাইলাইট মুছে ফেলা
+    // সব ক্যাটাগরি আইটেম থেকে হাইলাইট মুছে ফেলা (হুবহু আগের কোড)
     document.querySelectorAll('.cat-item').forEach(item => {
         item.style.background = "transparent";
         item.style.color = "#ccc";
     });
 
-    // বর্তমান আইটেমকে হাইলাইট করা
+    // বর্তমান আইটেমকে হাইলাইট করা (হুবহু আগের কোড)
     if (element) {
         element.style.background = "rgba(212, 175, 55, 0.2)";
         element.style.color = "#d4af37";
         
-        // হেডার টেক্সট পরিবর্তন (ঐচ্ছিক - প্রিমিয়াম ফিল দেয়)
+        // হেডার টেক্সট পরিবর্তন (ঐচ্ছিক - প্রিমিয়াম ফিল দেয়)
         const headerSpan = document.querySelector('.category-header span');
         if (headerSpan) headerSpan.innerText = element.innerText;
     }
@@ -1785,18 +1802,18 @@ window.filterCategory = function(category, element) {
     if (category === 'all') {
         filteredResults = products;
     } else {
-        // নিশ্চিত করুন আপনার Firebase ডাটাতে 'category' ফিল্ডটি আছে
-        filteredResults = products.filter(p => p.category === category);
+        // এখানে আমাদের এক্সট্রা হেল্পার ফাংশনটি দিয়ে নিখুঁত সাব-ক্যাটাগরি ম্যাচিং করা হচ্ছে
+        filteredResults = products.filter(p => checkSubCategoryMatch(p.category, category));
     }
 
-    // আপনার বিদ্যমান রেন্ডার ফাংশনটি কল করা (যা আপনি সার্চে ব্যবহার করেছেন)
+    // আপনার বিদ্যমান রেন্ডার ফাংশনটি কল করা (হুবহু আগের কোড)
     if (typeof renderFilteredProducts === 'function') {
         renderFilteredProducts(filteredResults);
     } else {
         console.error("renderFilteredProducts function not found!");
     }
 
-    // ড্রপডাউন বন্ধ করা
+    // ড্রপডাউন বন্ধ করা (হুবহু আগের কোড)
     const menu = document.getElementById('categoryMenu');
     if (menu) {
         menu.classList.remove('active');
@@ -1804,14 +1821,14 @@ window.filterCategory = function(category, element) {
         if (icon) icon.style.transform = 'rotate(0deg)';
     }
 
-    // স্মুথ স্ক্রল করে প্রোডাক্ট সেকশনে নিয়ে যাওয়া
+    // স্মুথ স্ক্রল করে প্রোডাক্ট সেকশনে নিয়ে যাওয়া (হুবহু আগের কোড)
     const container = document.getElementById('product-container');
     if (container) {
         container.scrollIntoView({ behavior: 'smooth' });
     }
 };
 
-// বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হওয়ার লজিক
+// বাইরে ক্লিক করলে ড্রপডাউন বন্ধ হওয়ার লজিক (হুবহু আগের কোড)
 document.addEventListener('click', (e) => {
     const wrapper = document.querySelector('.category-wrapper');
     const menu = document.getElementById('categoryMenu');
@@ -2381,32 +2398,25 @@ window.customerDeleteForEveryone = function(uid, msgId) {
 
 const backToTopBtn = document.getElementById("backToTop");
 
-// শুধুমাত্র যদি বাটনটি পেজে থাকে, তবেই এই কোড কাজ করবে
-if (backToTopBtn) {
-    window.onscroll = function() {
-        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
-            backToTopBtn.style.display = "flex"; 
-            backToTopBtn.style.opacity = "1";
-        } else {
-            backToTopBtn.style.opacity = "0";
-            setTimeout(() => {
-                // এখানেও চেক রাখা ভালো
-                if(backToTopBtn && backToTopBtn.style.opacity === "0") {
-                    backToTopBtn.style.display = "none";
-                }
-            }, 400);
-        }
-    };
+window.onscroll = function() {
+    if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+        backToTopBtn.style.display = "flex"; // আইকন সেন্টারে রাখার জন্য flex
+        backToTopBtn.style.opacity = "1";
+    } else {
+        backToTopBtn.style.opacity = "0";
+        setTimeout(() => {
+            if(backToTopBtn.style.opacity === "0") backToTopBtn.style.display = "none";
+        }, 400);
+    }
+};
 
-    backToTopBtn.onclick = function() {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    };
-} else {
-    console.log("Back to top button not found on this page, skipping scroll logic.");
-}
+backToTopBtn.onclick = function() {
+    // একদম স্মুথ টপ স্ক্রল
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+};
 
 ///notification js///
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";

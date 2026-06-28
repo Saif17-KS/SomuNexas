@@ -50,6 +50,7 @@
 
 <div class="admin-container">
     <h2>SOMUNEXUS ADMIN</h2>
+
     <form id="productForm">
         <input type="hidden" id="editProductId">
 
@@ -83,15 +84,56 @@
             <label>Product Category</label>
             <select id="pCategory" style="width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none;">
                 <option value="all">Select Category</option>
-                <option value="Watch">Luxury Watches</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Headphone">Premium Audio</option>
-                <option value="Clothing">Fashion</option>
-                <option value="Women">Women's Style</option>
-                <option value="Footwear">Footwear</option>
-                <option value="Perfume">Fragrances</option>
-                <option value="Jewelry">Jewelry</option>
-                <option value="Accessories">Accessories</option>
+
+                <optgroup label="⚡ Electronics & Gadgets" style="background: #222; color: #00bc8c; font-weight: bold;">
+                    <option value="Electronics_Mobile" style="color: #fff; font-weight: normal;">📱 Mobile & Tablets</option>
+                    <option value="Electronics" style="color: #fff; font-weight: normal;">💻 Computer & Laptops</option>
+                    <option value="Headphone" style="color: #fff; font-weight: normal;">🎧 Headphone & Audio</option>
+                    <option value="Watch" style="color: #fff; font-weight: normal;">⌚ Luxury & Smart Watches</option>
+                    <option value="Electronics_Drone" style="color: #fff; font-weight: normal;">🛸 Drone & Quadcopters</option>
+                    <option value="Electronics_Camera" style="color: #fff; font-weight: normal;">📷 Camera & Photography</option>
+                    <option value="Electronics_Gaming" style="color: #fff; font-weight: normal;">🎮 Gaming Consoles & Accessories</option>
+                    <option value="Electronics_Appliances" style="color: #fff; font-weight: normal;">📺 Home Appliances & TV</option>
+                    <option value="Electronics_Gadget" style="color: #fff; font-weight: normal;">🔌 Smart Gadgets & Component</option>
+                </optgroup>
+
+                <optgroup label="🕺 Men's Fashion" style="background: #222; color: #e74c3c; font-weight: bold;">
+                    <option value="Clothing" style="color: #fff; font-weight: normal;">👕 T-Shirts & Polos</option>
+                    <option value="Men_Shirt" style="color: #fff; font-weight: normal;">👔 Casual & Formal Shirts</option>
+                    <option value="Men_Panjabi" style="color: #fff; font-weight: normal;">🕌 Panjabi & Traditional</option>
+                    <option value="Men_Pants" style="color: #fff; font-weight: normal;">👖 Jeans & Trousers</option>
+                    <option value="Men_Activewear" style="color: #fff; font-weight: normal;">👟 Activewear & Jerseys</option>
+                    <option value="Men_Winter" style="color: #fff; font-weight: normal;">🧥 Winter Jackets & Hoodies</option>
+                    <option value="Men_Innerwear" style="color: #fff; font-weight: normal;">🩲 Innerwear & Boxers</option>
+                </optgroup>
+
+                <optgroup label="✨ Women's Style" style="background: #222; color: #d4af37; font-weight: bold;">
+                    <option value="Women_Dress" style="color: #fff; font-weight: normal;">👗 Dress & Traditional Wear</option>
+                    <option value="Women_Makeup" style="color: #fff; font-weight: normal;">💄 Makeup</option>
+                    <option value="Women_HairCare" style="color: #fff; font-weight: normal;">💇‍♀️ Hair Care</option>
+                    <option value="Women_SkinCare" style="color: #fff; font-weight: normal;">🧴 Skin Care</option>
+                    <option value="Women_Jewelry" style="color: #fff; font-weight: normal;">💍 Jewelry</option>
+                    <option value="Women_Accessories" style="color: #fff; font-weight: normal;">👜 Women Accessories</option>
+                    <option value="Women_UnderGarments" style="color: #fff; font-weight: normal;">👙 Under Garments</option>
+                    <option value="Women_Fragrance" style="color: #fff; font-weight: normal;">✨ Fragrance</option>
+                </optgroup>
+
+                <optgroup label="🍼 Mom & Baby" style="background: #222; color: #3498db; font-weight: bold;">
+                    <option value="Mom_Care" style="color: #fff; font-weight: normal;">🤰 Mom Care & Essentials</option>
+                    <option value="Baby_Clothing" style="color: #fff; font-weight: normal;">👶 Baby Clothing</option>
+                    <option value="Baby_Toys" style="color: #fff; font-weight: normal;">🧸 Baby Toys & Games</option>
+                    <option value="Baby_Diapering" style="color: #fff; font-weight: normal;">🧷 Diaper & Wipes</option>
+                    <option value="Baby_Feeding" style="color: #fff; font-weight: normal;">🍼 Feeding & Nursing</option>
+                    <option value="Baby_SkinCare" style="color: #fff; font-weight: normal;">🧼 Baby Skin & Hair Care</option>
+                </optgroup>
+
+                <optgroup label="👟 Footwear Collection" style="background: #222; color: #9b59b6; font-weight: bold;">
+                    <option value="Footwear" style="color: #fff; font-weight: normal;">👞 Men's Shoes & Sandals</option>
+                    <option value="Footwear_Women" style="color: #fff; font-weight: normal;">👠 Women's Heels & Flats</option>
+                    <option value="Footwear_Baby" style="color: #fff; font-weight: normal;">🧦 Kids & Baby Shoes</option>
+                </optgroup>
+
+                <option value="Accessories">👜 General Accessories</option>
             </select>
         </div>
 
@@ -112,7 +154,15 @@
 
         <div class="input-group">
             <label>Product Warranty</label>
-            <input type="text" id="productWarranty" placeholder="e.g. 1 Year Official">
+            <input type="text" id="productWarranty" placeholder="e.g. 1 Year Official" list="warrantyOptions">
+            <datalist id="warrantyOptions">
+                <option value="No Warranty">
+                <option value="7 Days Replacement Gurantee">              
+                <option value="6 Months Warranty">
+                <option value="1 Year Official Warranty">
+                <option value="1 Year Service Warranty">
+                <option value="2 Years Official Warranty">               
+            </datalist>
         </div>
 
         <button type="button" class="publish-btn" onclick="publishProduct()">PUBLISH PRODUCT</button>
@@ -204,19 +254,8 @@ function checkAdminAccess() {
         });
     });
 </script>
+
 <script type="module" src="script.js"></script>
 
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
